@@ -1,2 +1,3 @@
 # Portable-library
-An online library for KNUST Students
+A convenient portable library for KNUST Students
+
