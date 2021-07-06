@@ -18,7 +18,7 @@ app.config['SECRET_KEY'] = "theblossoms123@"
 app.config['DEBUG'] = True
 
 #takes care of encrypting
-bycrypt = Bcrypt()
+bcrypt = Bcrypt()
 
 
 # building a user login required function 
@@ -185,6 +185,157 @@ def sign_up_page():
             return redirect(url_for("confirm_email"))
 
     return render_template("add.html", form=form)
+
+
+
+@app.route("/forget_password/", methods=["POST", "GET"])
+def forget_password():
+    
+    form = ResetPassword(request.form)
+
+    if request.method =="POST" and form.validate():
+        username = form.username.data
+
+        # fetching the email from database
+        curs,connect = connection()
+           
+        curs.execute("select email from users where username = (%s) " , [username])
+        r_email = curs.fetchone()[0]
+        
+        connect.commit()
+        curs.close()
+        connect.close()
+        gc.collect()
+
+
+        # sending the code to the eamil
+        port = 465
+        stmp_server = "smtp.gmail.com"
+        
+        sender_email = "pentecostalrevivalcenterag@gmail.com"
+        receiver_email = r_email
+        name = username
+        password = "revmoses1954"
+
+        confirmation_code = ""
+        for a in range(0,7):
+            confirmation_code += str(random.randint(0,9))
+
+        
+
+        msg = MIMEText(" Hello "+ name + " ! \n \n You requested for a reset of password on the Pentecostal Revival center,AG website.To confirm that it was really you, please enter the confirmatory code  into the box providedonthe website. Thank you \n \n \t \t Confirmatory Code: "+ confirmation_code  +"\n \n  But if it was not you can ignore this mail sent to you ")
+        msg['Subject'] = 'PRC AG website sign up email confirmation'
+        msg['From'] = 'pentecostalrevivalcenterag@gmail.com'
+        msg['To'] =  r_email
+        
+        session["conf"] = confirmation_code
+
+        print(confirmation_code)
+
+        context = ssl.create_default_context()
+
+        with smtplib.SMTP_SSL(stmp_server,port,context = context) as server:
+            server.login(sender_email,password)
+            server.sendmail(sender_email,receiver_email,msg.as_string())
+            print('Mail sent')
+
+
+        return redirect(url_for('confirm_reset'))
+
+    return render_template("forgetPassword.html", form=form)
+
+
+@app.route('/confirm_reset/', methods=["GET","POST"])
+def confirm_reset():
+    form=ConfirmEmail(request.form)
+    if request.method =="POST" and form.validate():
+        confirmed_code = form.confirmation.data
+        conf = session["conf"]
+        if conf == confirmed_code:
+            return redirect(url_for('set_password'))
+
+        else:
+            error = "Your credentials do not match, try again" 
+            return redirect(url_for('home_page'))
+
+    return render_template("confirm_email.html", form = form)
+
+
+
+
+@app.route('/set_password/',methods=["GET","POST"])
+def set_password():
+    error = ''
+    form = SetPassword(request.form)
+    if request.method =='POST' and form.validate():
+        username = form.username.data
+        password = form.password.data
+        confirm_password = form.confirm_password.data
+
+        if password == confirm_password:
+
+            password = bcrypt.generate_password_hash(password)
+
+            curs, connect = connection()
+            curs.execute("update users set password = (%s)  WHERE username = (%s)",[password,username])
+            connect.commit()
+            curs.close()
+            connect.close()
+            gc.collect()
+            return "it worked"
+
+        else:
+            error = "Your credentials do not match, try again" 
+            return render_template('reset_password.html', error = error)
+
+
+    return render_template('reset_password.html', form=form)
+
+
+
+
+@app.route('/',methods=["GET","POST"])
+def home_page():
+    error = ''
+    form = LogIn(request.form)
+    if request.method =='POST' and form.validate():
+        username = form.username.data
+        password = form.password.data
+
+        curs, connect = connection()
+        info = curs.execute("SELECT * FROM users WHERE username = %s", [username])
+
+        # fetching the password
+
+        curs.execute("SELECT password FROM users WHERE username = %s", [username])
+        
+        Passwd = curs.fetchone()[0]
+
+        
+
+        # checking if the password valid
+
+        
+
+        if info == 1 and bcrypt.check_password_hash(Passwd,password ) == True :
+            session['logged_in'] = True
+            session['username'] = request.form['username']
+            update = request.form['username']
+            # session['admin'] = True
+
+            return "it worked"
+
+        
+
+
+        else:
+            error = "Your credentials are invalid, try again" 
+        curs.close()
+        connect.close()
+        gc.collect() 
+        return render_template('login.html', error = error,form = form)
+
+    return render_template('login.html', error = error, form = form)
 
 
 if __name__== "__main__":
