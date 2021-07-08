@@ -50,8 +50,10 @@ class RegistrationForm(Form):
     confirm_password = PasswordField(' Confirm Password')
 
 
-class ResetPassword(Form):
     username = TextField('Enter your Username', [validators.Length(min=4, max=24)])
+
+class ForgetPassword(Form):
+    email = TextField('Enter your email', [validators.Length(min=4, max=30)])
 
 class ConfirmEmail(Form):
     confirmation = TextField('Enter the Confirmatory Code', [validators.Length(min=4, max=24)])
@@ -191,29 +193,17 @@ def sign_up_page():
 @app.route("/forget_password/", methods=["POST", "GET"])
 def forget_password():
     
-    form = ResetPassword(request.form)
+    form = ForgetPassword(request.form)
 
     if request.method =="POST" and form.validate():
-        username = form.username.data
-
-        # fetching the email from database
-        curs,connect = connection()
-           
-        curs.execute("select email from users where username = (%s) " , [username])
-        r_email = curs.fetchone()[0]
-        
-        connect.commit()
-        curs.close()
-        connect.close()
-        gc.collect()
-
+        email = form.email.data
 
         # sending the code to the eamil
         port = 465
         stmp_server = "smtp.gmail.com"
         
         sender_email = "pentecostalrevivalcenterag@gmail.com"
-        receiver_email = r_email
+        receiver_email = eamil
         name = username
         password = "revmoses1954"
 
@@ -226,7 +216,7 @@ def forget_password():
         msg = MIMEText(" Hello "+ name + " ! \n \n You requested for a reset of password on the Pentecostal Revival center,AG website.To confirm that it was really you, please enter the confirmatory code  into the box providedonthe website. Thank you \n \n \t \t Confirmatory Code: "+ confirmation_code  +"\n \n  But if it was not you can ignore this mail sent to you ")
         msg['Subject'] = 'PRC AG website sign up email confirmation'
         msg['From'] = 'pentecostalrevivalcenterag@gmail.com'
-        msg['To'] =  r_email
+        msg['To'] =  email
         
         session["conf"] = confirmation_code
 

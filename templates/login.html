@@ -56,10 +56,7 @@
         <br>
 
 
-        <h4><strong><u>Confirm Code</u></strong> </h4>
-        <p style="text-align: center;">A confirmatory code has been sent to your email. <br> Please check and type it in the box provided below </p>
-
-
+        <h4><strong><u>Portable-library</u></strong> </h4>
         
         {% from "_formhelpers.html" import render_field %}
             <form method="POST"  action="" role="">
@@ -68,7 +65,7 @@
                     {{ render_field(form.password) }}
                 </dl>
 
-                <p><input type="submit" value="Submit" ></p>
+                <p><input type="submit" value="Log in" ></p>
             </form>
             {% if error %}
                 <p class="error"><strong>Error:</strong> {{error}} </p>
