@@ -42,15 +42,12 @@ class RegistrationForm(Form):
     sex = TextField('Sex', [validators.Length(min=1, max=7)])
     course =TextField('Course', [validators.Length(min=3, max=30)])
     year = TextField('Year', [validators.Length(min=1, max=7)])
-    contact = TextField('Contact', [validators.Length(min=1, max=15)])
-    username = TextField('Username', [validators.Length(min=4, max=24)])
+    #contact = TextField('Contact', [validators.Length(min=1, max=15)])
+    username = TextField('Enter your Username', [validators.Length(min=4, max=24)])
     email = TextField('Email Address', [validators.Length(min=9, max=50)])
-    password = PasswordField('Password', [validators.Length(min=5, max=40)])
     password = PasswordField('Enter your new Password', [validators.Required(),validators.EqualTo('confirm_password', message="Passwords must match")])
     confirm_password = PasswordField(' Confirm Password')
 
-
-    username = TextField('Enter your Username', [validators.Length(min=4, max=24)])
 
 class ForgetPassword(Form):
     email = TextField('Enter your email', [validators.Length(min=4, max=30)])
@@ -117,7 +114,7 @@ def confirm_coded():
             sex=session["sex"]
             course = session["course"]
             year=session["year"]           
-            contact=session["contact"]
+            #contact=session["contact"]
             username=session["username"]
             email = session["email"]
             password = session["password"]
@@ -125,8 +122,8 @@ def confirm_coded():
             curs,connect = connection()
 
              # inserting statements into the database
-            input_statement = ("INSERT INTO users (firstname,lastname, sex,course,year,contact, username, email, password) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)" ) 
-            data = (thwart(firstname), thwart(lastname),thwart(sex), thwart(course),thwart(year),thwart(contact), thwart(username), thwart(email), thwart(password))
+            input_statement = ("INSERT INTO users (firstname,lastname, sex,course,year, username, email, password) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)" ) 
+            data = (thwart(firstname), thwart(lastname),thwart(sex), thwart(course),thwart(year), thwart(username), thwart(email), thwart(password))
             curs.execute( input_statement, data)
 
             connect.commit()
@@ -159,7 +156,7 @@ def sign_up_page():
         session["sex"] = form.sex.data
         session["course"] = form.course.data
         session["year"] = form.year.data
-        session["contact"] = form.contact.data
+        #session["contact"] = form.contact.data
         session["username"] = form.sex.data
         session["email"] = form.email.data
 
@@ -175,7 +172,7 @@ def sign_up_page():
         # checking if the username matches that of another person
     
 
-        check_name = curs.execute("SELECT * FROM users WHERE username = %s ", [session["username"]] )
+        check_name = curs.execute("SELECT * FROM users WHERE email = %s ", [session["email"]] )
 
         if int(check_name) > 0:
             flash("Username already used,please choose another one")
@@ -203,7 +200,7 @@ def forget_password():
         stmp_server = "smtp.gmail.com"
         
         sender_email = "pentecostalrevivalcenterag@gmail.com"
-        receiver_email = eamil
+        receiver_email = email
         name = username
         password = "revmoses1954"
 
@@ -213,7 +210,7 @@ def forget_password():
 
         
 
-        msg = MIMEText(" Hello "+ name + " ! \n \n You requested for a reset of password on the Pentecostal Revival center,AG website.To confirm that it was really you, please enter the confirmatory code  into the box providedonthe website. Thank you \n \n \t \t Confirmatory Code: "+ confirmation_code  +"\n \n  But if it was not you can ignore this mail sent to you ")
+        msg = MIMEText(" Hello! \n \n You requested for a reset of password on the Pentecostal Revival center,AG website.To confirm that it was really you, please enter the confirmatory code  into the box providedonthe website. Thank you \n \n \t \t Confirmatory Code: "+ confirmation_code  +"\n \n  But if it was not you can ignore this mail sent to you ")
         msg['Subject'] = 'PRC AG website sign up email confirmation'
         msg['From'] = 'pentecostalrevivalcenterag@gmail.com'
         msg['To'] =  email
