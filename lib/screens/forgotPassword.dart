@@ -10,9 +10,9 @@ class ForgotPasswordState extends StatefulWidget{
   }
 }
 
-Class ForgotPassword extends State<ForgotPasswordState>{
+class ForgotPassword extends State<ForgotPasswordState>{
 
-TextEditingController _email=TextEditingController();
+const TextEditingController _email=TextEditingController();
 
   @override
   Widget build(BuildContext, context){
@@ -33,7 +33,7 @@ TextEditingController _email=TextEditingController();
 
         ]
 
-      );
+      )
 
     );
   }
