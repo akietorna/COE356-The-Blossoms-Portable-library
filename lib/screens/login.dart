@@ -51,7 +51,7 @@ class LoginPage extends State<LoginPageState> {
               TextFieldState(
                   _userEmail, "E-mail", "Enter your e-mail", emailIcon),
               PasswordFieldState(
-                  _password, "Password", "Enter your password", passwordIcon), 
+                  _password, "Password", "Enter your password", passwordIcon),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 RaisedButton(
                     child: Text("Log in"), color: ButtonColor, onPressed: null),
