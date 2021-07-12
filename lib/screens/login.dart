@@ -58,6 +58,9 @@ class LoginPage extends State<LoginPageState> {
                 Container(
                   margin: EdgeInsets.fromLTRB(80, 0, 0, 0),
                   child: GestureDetector(
+                    onTap:(){
+                      Navigator.pushNamed(context, "/forgotPassword");
+                    }
                     child: Text("forgot password"),
                   ),
                 )

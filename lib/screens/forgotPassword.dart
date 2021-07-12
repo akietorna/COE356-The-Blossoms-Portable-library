@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
-import "package:software_engineering_project/screens/main.dart"
+import "package:software_engineering_project/screens/main.dart";
+import "package:software_engineering_project/screens/logo.dart";
+import "package:software_engineering_project/screens/login.dart";
 
 class ForgotPasswordState extends StatefulWidget{
   @override
@@ -22,6 +24,12 @@ TextEditingController _email=TextEditingController();
       ),
       body: ListView(
         children:[
+          LogoImage(),
+          Text("Enter your email below"),
+          TextFieldState(
+                  _email, "E-mail", "Enter your e-mail", emailIcon),
+          RaisedButton(
+                    child: Text("Submit"), color: ButtonColor, onPressed: null),
 
         ]
 
