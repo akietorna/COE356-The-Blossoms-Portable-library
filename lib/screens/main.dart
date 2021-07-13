@@ -11,7 +11,7 @@ void main() => runApp(MaterialApp(
       routes: {
         "/": (context) => LoginPageState(),
         "/signup": (context) => SignupPageState(),
-        "/forgotPassword": (context)=> ForgotPasswordState(),
+        "/forgotPassword": (context) => ForgotPasswordState(),
       },
       title: "Blossoms",
     ));
