@@ -31,7 +31,7 @@ class SignupPage extends State<SignupPageState> {
         ),
         body: ListView(
           children: [
-            LogoImage(),
+            LogoImage("./assets/images/signup.png"),
             enterCredentials,
             TextFieldState(
                 _firstName, "First name", "Enter first name", nameIcon),

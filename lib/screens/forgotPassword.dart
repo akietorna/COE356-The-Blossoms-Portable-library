@@ -23,17 +23,24 @@ class ForgotPassword extends State<ForgotPasswordState> {
         backgroundColor: appBarColor,
       ),
       body: ListView(children: [
-        LogoImage(),
-        Container(
-          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-          child: Center(child: Text("Enter your email below")),
+        LogoImage("./assets/images/forgotpassword.png"),
+        Center(
+          child: Container(
+            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: Center(child: Text("Enter your email below")),
+          ),
         ),
         TextFieldState(_email, "E-mail", "Enter your e-mail", emailIcon),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             RaisedButton(
-                child: Text("Submit"), onPressed: null, color: ButtonColor),
+                child: Text("Submit"),
+                onPressed: () {
+                  Navigator.pushNamed(
+                      context, "/forgotPassword/codeConfirmation");
+                },
+                color: ButtonColor),
           ],
         )
       ]),
