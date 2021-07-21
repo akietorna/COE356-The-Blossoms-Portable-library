@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,url_for,redirect,flash,session,g, send_from_directory, abort
+from flask import Flask,render_template,request,url_for,redirect,flash,session,g, send_from_directory, abort,jsonify
 from database import connection
 from wtforms import Form, BooleanField, TextField, PasswordField,validators
 from flask_bcrypt import Bcrypt
@@ -149,19 +149,19 @@ def confirm_coded():
 
 def sign_up_page():
 
-    form = RegistrationForm(request.form)
-    if request.method =='POST' and form.validate():
-        session["firstname"] = form.firstname.data
-        session["lastname"] = form.lastname.data
-        session["sex"] = form.sex.data
-        session["course"] = form.course.data
-        session["year"] = form.year.data
+    if request.method =='POST':
+
+        session["firstname"] = form.getJSON("firstname")
+        session["lastname"] = form.getJSON("lastname")
+        session["sex"] = form.getJSON("sex")
+        session["course"] = form.getJSON("course")
+        session["year"] = form.getJSON("year")
         #session["contact"] = form.contact.data
-        session["username"] = form.sex.data
-        session["email"] = form.email.data
+        session["username"] = form.getJSON("username")
+        session["email"] = form.getJSON("email")
 
         bcrypt = Bcrypt()
-        session["password"] = bcrypt.generate_password_hash(form.password.data)
+        session["password"] = bcrypt.generate_password_hash(form.getJSON("password"))
 
         
 
@@ -323,6 +323,54 @@ def home_page():
         return render_template('login.html', error = error,form = form)
 
     return render_template('login.html', error = error, form = form)
+
+
+@app.route('/get_comment/',methods=["GET","POST"])
+@logged_in_required
+def get_comment():
+    error=''
+    try:
+        curs, connect = connection()
+        curs.execute('SELECT * from comments')
+        data = curs.fetchall()
+        
+        data = reversed(data)
+
+
+
+        return render_template("comments.html", value = data)
+
+    except Exception as e:
+        return render_template('comments.html', name=session['admin'])
+
+
+@app.route('/comments/',methods=["GET","POST"])
+@login_required
+def comments():
+    form = Comments(request.form)
+    if request.method =='POST' and form.validate():
+        sender_name = form.sender_name.data
+        comments= form.comments.data
+        contact = form.contact.data
+
+        time_sent = datetime.now()
+
+        curs,connect = connection()
+                    
+        input_statement = ("INSERT INTO comments(sender_name,time_sent,contact,comment) VALUES (%s,%s,%s,%s)" ) 
+        data = [sender_name, time_sent,contact, comments]
+        curs.execute( input_statement, data)
+
+        connect.commit()
+        print("The process was sucessful")
+        curs.close()
+        connect.close()
+        gc.collect()
+
+        return redirect(url_for('thank_you1'))
+
+    return render_template("comments.html", form=form, name=session['logged_in'])
+
 
 
 if __name__== "__main__":
