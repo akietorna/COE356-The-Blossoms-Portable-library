@@ -1,5 +1,6 @@
 ## Portable Library - The Blossoms
-##Project for Software Engineering, COE 356
+
+#Project for Software Engineering, COE 356
 
 A new Flutter project.
 
