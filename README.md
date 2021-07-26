@@ -8,4 +8,4 @@ A convenient mobile application to allow students of college of engineering, KNU
 
 
 Features of the portable library
-#* Be ready to be inspired
+# *Be ready to be inspired
