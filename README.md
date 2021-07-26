@@ -1,8 +1,8 @@
-#Portable Library, The Blossoms
+# Portable Library, The Blossoms
 
-#Software Engineering Project, 2021
+## Software Engineering Project, 2021
 
-#Getting Started
+## Getting Started
 
 A convenient mobile application to allow students of college of engineering, KNUST to gain access to necessary course materials
 
