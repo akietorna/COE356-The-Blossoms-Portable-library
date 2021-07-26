@@ -7,5 +7,5 @@
 A convenient mobile application to allow students of college of engineering, KNUST to gain access to necessary course materials
 
 
-Features of the portable library
-# *Be ready to be inspired
+## Features of the portable library
+*Be ready to be inspired
