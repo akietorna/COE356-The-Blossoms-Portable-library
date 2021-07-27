@@ -21,6 +21,20 @@ class PasswordFieldState extends StatefulWidget {
 class PasswordField extends State<PasswordFieldState> {
   bool _obscurity = true;
 
+  Widget passwordSufixIcon() {
+    if (_obscurity == true) {
+      return Icon(Icons.visibility_off);
+    } else {
+      return Icon(Icons.visibility);
+    }
+  }
+
+  void _togglePasswordView() {
+    setState(() {
+      _obscurity = !_obscurity;
+    });
+  }
+
   Widget passwordFieldIcon;
   TextEditingController controler;
   String label, hint;
@@ -34,10 +48,13 @@ class PasswordField extends State<PasswordFieldState> {
         alignment: Alignment.center,
         padding: EdgeInsets.all(15),
         child: TextField(
+            autofocus: true,
             controller: controler,
             obscureText: _obscurity,
             decoration: InputDecoration(
               prefixIcon: passwordFieldIcon,
+              suffix: InkWell(
+                  onTap: _togglePasswordView, child: passwordSufixIcon()),
               border: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Colors.red,

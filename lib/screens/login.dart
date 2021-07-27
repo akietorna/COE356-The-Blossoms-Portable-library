@@ -46,7 +46,7 @@ class LoginPage extends State<LoginPageState> {
           ),
           Column(
             children: [
-              LogoImage(),
+              LogoImage("./assets/images/login.png"),
               enterCredentials,
               TextFieldState(
                   _userEmail, "E-mail", "Enter your e-mail", emailIcon),
