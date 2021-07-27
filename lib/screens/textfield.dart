@@ -26,24 +26,25 @@ class TextFields extends State<TextFieldState> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Container(
-        alignment: Alignment.center,
-        padding: EdgeInsets.all(15),
-        child: TextField(
-            controller: controler,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.red,
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.center,
+          padding: EdgeInsets.all(15),
+          child: TextField(
+              autofocus: true,
+              controller: controler,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                prefixIcon: textFieldIcon,
-                labelText: label,
-                hintText: hint,
-                hintStyle: TextStyle(color: hintColor))),
-      ),
-    ]);
+                  prefixIcon: textFieldIcon,
+                  labelText: label,
+                  hintText: hint,
+                  hintStyle: TextStyle(color: hintColor))),
+        )
+      ],
+    );
   }
 }
