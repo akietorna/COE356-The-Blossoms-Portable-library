@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:software_engineering_project/screens/logo.dart';
-import 'package:software_engineering_project/screens/main.dart';
+import "package:software_engineering_project/screens/backgroundoverlay.dart";
 import 'package:software_engineering_project/screens/login.dart';
 import 'package:software_engineering_project/screens/textfield.dart';
 import 'package:software_engineering_project/screens/passwordTextField.dart';
@@ -24,12 +24,15 @@ class SignupPage extends State<SignupPageState> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+        /*appBar: AppBar(
           title: Text("Sign-up"),
           centerTitle: true,
           backgroundColor: appBarColor,
-        ),
-        body: ListView(
+        ),*/
+        body: Stack(
+      children: [
+        BackgroundOverlayState("./assets/images/signupLibrary.jpg"),
+        ListView(
           children: [
             LogoImage("./assets/images/signup.png"),
             enterCredentials,
@@ -61,6 +64,8 @@ class SignupPage extends State<SignupPageState> {
                   )
                 ])),
           ],
-        ));
+        )
+      ],
+    ));
   }
 }
