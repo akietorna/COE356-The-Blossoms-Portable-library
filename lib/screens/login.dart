@@ -29,41 +29,6 @@ class LoginPage extends State<LoginPageState> {
       ),*/
       body: Stack(
         children: [
-<<<<<<< Updated upstream
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
-            alignment: Alignment.topRight,
-            child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, "/signup");
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Icon(Icons.person_add),
-                    Text("Sign-up"),
-                  ],
-                )),
-          ),
-          Column(
-            children: [
-              LogoImage("./assets/images/login.png"),
-              enterCredentials,
-              TextFieldState(
-                  _userEmail, "E-mail", "Enter your e-mail", emailIcon),
-              PasswordFieldState(
-                  _password, "Password", "Enter your password", passwordIcon),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                RaisedButton(
-                    child: Text("Log in"), color: ButtonColor, onPressed: null),
-                Container(
-                  margin: EdgeInsets.fromLTRB(80, 0, 0, 0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, "/forgotPassword");
-                    },
-                    child: Text("forgot password"),
-=======
           // Container(
           //   width: MediaQuery.of(context).size.width,
           //   height: MediaQuery.of(context).size.height,
@@ -91,7 +56,6 @@ class LoginPage extends State<LoginPageState> {
                     "Login",
                     textAlign: TextAlign.center,
                     textScaleFactor: 2,
->>>>>>> Stashed changes
                   ),
                   LogoImage("./assets/images/login.png"),
                   enterCredentials,
