@@ -22,17 +22,29 @@ bcrypt = Bcrypt()
 
 
 # building a user login required function 
-def login_required(f):
-    @wraps(f)
-    def wrapping(*args, **kwargs):
-        if 'logged_in' in session:
-            return f(*args, **kwargs)
+# def login_required(f):
+#     @wraps(f)
+#     def wrapping(*args, **kwargs):
+#         if 'logged_in' in session:
+#             return f(*args, **kwargs)
         
-        else :
-            flash('You need to login first')
-            return redirect(url_for('home_page'))
+#         else :
+#             flash('You need to login first')
+#             return redirect(url_for('home_page'))
         
-    return wrapping
+#     return wrapping
+
+#  def logged_in_required(f):
+#     @wraps(f)
+#     def wrapping(*args, **kwargs):
+#         if 'admin' in session:
+#             return f(*args, **kwargs)
+        
+#         else :
+#             flash('You need to login first')
+#             return redirect(url_for('home_page'))
+        
+#     return wrapping
 
 
 
@@ -72,17 +84,16 @@ def confirm_email():
 
 @app.route("/confirm_coded/", methods=["POST", "GET"])
 def confirm_coded():
+    info={}
     if request.method =="POST":
-
-        request_data = request.get_json()
 
         confirm_code = request_data["confirm_code"]
         conf = session["conf"]
         # inserting statements into the database
         if confirmed_code == conf:
             firstname = session["firstname"]
-            lastname=session["lastname"]          
-            username=session["username"]
+            lastname = session["lastname"]          
+            username = session["username"]
             email = session["email"]
             password = session["password"]
 
@@ -98,16 +109,18 @@ def confirm_coded():
             connect.close()
             gc.collect()
             session['logged_in'] = True
+            info['status'] ='You are successfully logged in'
+
+            jsonify()
 
             return url_for("select_program")
 
         else:
-            error = "The confirmatory code was incorrect " 
+            info['status'] ='Error logging in'
             return 
 
-    return jsonify()
     
-@app.route("select_program", methods=['GET','POST'])
+@app.route("/select_program/", methods=['GET','POST'])
 def select_program():
     return
 
@@ -116,7 +129,7 @@ def select_program():
 @app.route('/sign_up_page/',methods=["GET","POST"])
 
 def sign_up():
-
+    info ={}
     if request.method =='POST':
         request_info = request.get_json()
 
@@ -140,25 +153,21 @@ def sign_up():
         check_name = curs.execute("SELECT * FROM users WHERE email = %s ", [session["email"]] )
 
         if int(check_name) > 0:
-            flash("Email already used,please choose another one")
-            return redirect(url_for('sign_up'))
+            info['status'] = 'Email already used, please choose another one'
+            return jsonify(info), redirect(url_for('sign_up'))
 
 
         else:
-
             return redirect(url_for("confirm_email"))
 
-    return jsonify()
 
 
 
 @app.route("/forget_password/", methods=["POST", "GET"])
 def forget_password():
-    
-    form = ForgetPassword(request.form)
-
+    information = {}
     if request.method =="POST" :
-        email = form.email.data
+        email = request.form['email']
 
         # sending the code to the eamil
         port = 465
@@ -194,21 +203,22 @@ def forget_password():
 
         return redirect(url_for('confirm_reset'))
 
-    return render_template("forgetPassword.html", form=form)
+    else:
+        return redirect(url_for('forget_password'))
 
 
 @app.route('/confirm_reset/', methods=["GET","POST"])
 def confirm_reset():
-    form=ConfirmEmail(request.form)
-    if request.method =="POST" and form.validate():
-        confirmed_code = form.confirmation.data
+    info = {}
+    if request.method =="POST" :
+        confirmed_code = request.form['confirm_code']
         conf = session["conf"]
         if conf == confirmed_code:
             return redirect(url_for('set_password'))
 
         else:
-            error = "Your credentials do not match, try again" 
-            return redirect(url_for('home_page'))
+            info['status']= 'You typed the wrong confirmatory code'
+            return jsonify(info)
 
     return render_template("confirm_email.html", form = form)
 
@@ -217,12 +227,11 @@ def confirm_reset():
 
 @app.route('/set_password/',methods=["GET","POST"])
 def set_password():
-    error = ''
-    form = SetPassword(request.form)
+    info = {}
     if request.method =='POST' :
-        username = form.username.data
-        password = form.password.data
-        confirm_password = form.confirm_password.data
+        username = request.form['username']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
 
         if password == confirm_password:
 
@@ -230,29 +239,28 @@ def set_password():
 
             curs, connect = connection()
             curs.execute("update users set password = (%s)  WHERE username = (%s)",[password,username])
+            info['status'] = 'Password sucessfully resetted'
             connect.commit()
             curs.close()
             connect.close()
             gc.collect()
-            return "it worked"
+            return jsonify(info)
 
         else:
-            error = "Your credentials do not match, try again" 
+            info['status'] = 'Error resetting password'
             return render_template('reset_password.html', error = error)
 
-
-    return render_template('reset_password.html', form=form)
 
 
 
 
 @app.route('/',methods=["GET","POST"])
 def home_page():
-    error = ''
-    form = LogIn(request.form)
+    d = {}
     if request.method =='POST':
-        username = form.username.data
-        password = form.password.data
+
+        username = request.form['username']
+        password = request.form['password']
 
         curs, connect = connection()
         info = curs.execute("SELECT * FROM users WHERE username = %s", [username])
@@ -263,6 +271,8 @@ def home_page():
         
         Passwd = curs.fetchone()[0]
 
+        curs.close()
+        connect.close()
         
 
         # checking if the password valid
@@ -271,29 +281,18 @@ def home_page():
 
         if info == 1 and bcrypt.check_password_hash(Passwd,password ) == True :
             session['logged_in'] = True
-            session['username'] = request.form['username']
-            update = request.form['username']
-            # session['admin'] = True
-
-            return "it worked"
-
-        
-
+            d["status"] = "Log in was succesful"
+            return jsonify(d)
 
         else:
-            error = "Your credentials are invalid, try again" 
-        curs.close()
-        connect.close()
-        gc.collect() 
-        return render_template('login.html', error = error,form = form)
-
-    return render_template('login.html', error = error, form = form)
+            d['status'] = "Your credentials are invalid, try again" 
+            return jsonify(d)
 
 
 @app.route('/get_comment/',methods=["GET","POST"])
-@logged_in_required
+# @logged_in_required
 def get_comment():
-    error=''
+    d = {}
     try:
         curs, connect = connection()
         curs.execute('SELECT * from comments')
@@ -303,36 +302,21 @@ def get_comment():
 
 
 
-        return jsonify()
+        return jsonify(data)
 
     except Exception as e:
-        return render_template('comments.html', name=session['admin'])
+        d['status'] = 'Error getting the comments'
+        return jsonify(d)
 
-
-@app.route('/get_comment/',methods=["GET","POST"])
-@logged_in_required
-def get_comment():
-    error=''
-    try:
-        curs, connect = connection()
-        curs.execute('SELECT * from comments')
-        data = curs.fetchall()
-        
-        data = reversed(data)
-
-        return jsonify()
-
-    except Exception as e:
-        return render_template('comments.html', name=session['admin'])
 
 @app.route('/comments/',methods=["GET","POST"])
-@login_required
+#@login_required
 def comments():
-    form = Comments(request.form)
+    d = {}
     if request.method =='POST':
-        sender_name = form.sender_name.data
-        comments= form.comments.data
-        contact = form.contact.data
+        sender_name = request.form['sender']
+        comments= request.form['comment']
+        contact = request.form['contact']
 
         time_sent = datetime.now()
 
@@ -343,20 +327,24 @@ def comments():
         curs.execute( input_statement, data)
 
         connect.commit()
-        print("The process was sucessful")
         curs.close()
         connect.close()
         gc.collect()
 
-        return redirect(url_for('thank_you1'))
+        d['status'] = 'Comment succesfully recieved '
 
-    return render_template("comments.html", form=form, name=session['logged_in'])
+        return jsonify(d)
+
+    else:
+        d['status'] = 'Error sending comment'
+        return jsonify(d)
+
 
 
 @app.route('/notes/',methods=["GET","POST"])
-@logged_in_required
+#@logged_in_required
 def notes():
-    error=''
+    d = {}
     try:
         curs, connect = connection()
         curs.execute('SELECT * FROM testimony')
@@ -366,15 +354,16 @@ def notes():
 
 
 
-        return jsonify()
+        return jsonify(data)
 
     except Exception as e:
-        return render_template('testimony1.html', name=session['admin'])
+        d['status']= 'Error loading notes'
+        return jsonify(d)
 
 
 
 @app.route('/download/',methods=["GET","POST"])
-@login_required
+#@login_required
 def download():
     path=request.args.get('id')
     return send_file(path,as_attachment=True, name=session["logged_in"])
