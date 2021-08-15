@@ -21,31 +21,6 @@ app.config['DEBUG'] = True
 bcrypt = Bcrypt()
 
 
-# building a user login required function 
-# def login_required(f):
-#     @wraps(f)
-#     def wrapping(*args, **kwargs):
-#         if 'logged_in' in session:
-#             return f(*args, **kwargs)
-        
-#         else :
-#             flash('You need to login first')
-#             return redirect(url_for('home_page'))
-        
-#     return wrapping
-
-#  def logged_in_required(f):
-#     @wraps(f)
-#     def wrapping(*args, **kwargs):
-#         if 'admin' in session:
-#             return f(*args, **kwargs)
-        
-#         else :
-#             flash('You need to login first')
-#             return redirect(url_for('home_page'))
-        
-#     return wrapping
-
 
 
 # this  function sends a confirmatory code to the user
@@ -117,13 +92,9 @@ def confirm_coded():
 
         else:
             info['status'] ='Error logging in'
-            return 
+            return jsonify(info)
 
     
-@app.route("/select_program/", methods=['GET','POST'])
-def select_program():
-    return
-
 
 
 @app.route('/sign_up_page/',methods=["GET","POST"])
@@ -169,39 +140,49 @@ def forget_password():
     if request.method =="POST" :
         email = request.form['email']
 
-        # sending the code to the eamil
-        port = 465
-        stmp_server = "smtp.gmail.com"
+        curs, connect = connection()
+
+        check_account = curs.execute("select * from users where email = %s ", email)
+
+        if len(check_account) > 0:
+
+            # sending the code to the eamil
+            port = 465
+            stmp_server = "smtp.gmail.com"
+            
+            sender_email = "pentecostalrevivalcenterag@gmail.com"
+            receiver_email = email
+            name = username
+            password = "revmoses1954"
+
+            confirmation_code = ""
+            for a in range(0,7):
+                confirmation_code += str(random.randint(0,9))
+
+            
+
+            msg = MIMEText(" Hello! \n \n You requested for a reset of password on the Pentecostal Revival center,AG website.To confirm that it was really you, please enter the confirmatory code  into the box providedonthe website. Thank you \n \n \t \t Confirmatory Code: "+ confirmation_code  +"\n \n  But if it was not you can ignore this mail sent to you ")
+            msg['Subject'] = 'PRC AG website sign up email confirmation'
+            msg['From'] = 'pentecostalrevivalcenterag@gmail.com'
+            msg['To'] =  email
+            
+            session["conf"] = confirmation_code
+
+            print(confirmation_code)
+
+            context = ssl.create_default_context()
+
+            with smtplib.SMTP_SSL(stmp_server,port,context = context) as server:
+                server.login(sender_email,password)
+                server.sendmail(sender_email,receiver_email,msg.as_string())
+                print('Mail sent')
+
+
+            return redirect(url_for('confirm_reset'))
         
-        sender_email = "pentecostalrevivalcenterag@gmail.com"
-        receiver_email = email
-        name = username
-        password = "revmoses1954"
-
-        confirmation_code = ""
-        for a in range(0,7):
-            confirmation_code += str(random.randint(0,9))
-
-        
-
-        msg = MIMEText(" Hello! \n \n You requested for a reset of password on the Pentecostal Revival center,AG website.To confirm that it was really you, please enter the confirmatory code  into the box providedonthe website. Thank you \n \n \t \t Confirmatory Code: "+ confirmation_code  +"\n \n  But if it was not you can ignore this mail sent to you ")
-        msg['Subject'] = 'PRC AG website sign up email confirmation'
-        msg['From'] = 'pentecostalrevivalcenterag@gmail.com'
-        msg['To'] =  email
-        
-        session["conf"] = confirmation_code
-
-        print(confirmation_code)
-
-        context = ssl.create_default_context()
-
-        with smtplib.SMTP_SSL(stmp_server,port,context = context) as server:
-            server.login(sender_email,password)
-            server.sendmail(sender_email,receiver_email,msg.as_string())
-            print('Mail sent')
-
-
-        return redirect(url_for('confirm_reset'))
+        else:
+            information['error'] = 'No account connected to this email'
+            return jsonify(information)
 
     else:
         return redirect(url_for('forget_password'))
@@ -220,7 +201,6 @@ def confirm_reset():
             info['status']= 'You typed the wrong confirmatory code'
             return jsonify(info)
 
-    return render_template("confirm_email.html", form = form)
 
 
 
@@ -248,7 +228,7 @@ def set_password():
 
         else:
             info['status'] = 'Error resetting password'
-            return render_template('reset_password.html', error = error)
+            return jsonify(info)
 
 
 
