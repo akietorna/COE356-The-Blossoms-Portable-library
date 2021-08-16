@@ -70,6 +70,8 @@ final formKey=GlobalKey<FormState>();
                     child: Column(
                       children:[
                         TextFormField(
+                          validator: (value)=>
+                          value.contains("@") ? null: "Enter a valid email",
               autofocus: true,
               controller: _userEmail,
               decoration: InputDecoration(
@@ -83,7 +85,7 @@ final formKey=GlobalKey<FormState>();
                   hintStyle: TextStyle(color: hintColor))),
 
                   TextFormField(
-                    
+                    validator: (value)=> value.length<8? "Password should be more than 8 characters":null,
             autofocus: true,
             controller: _password,
             obscureText: _obscurity,
