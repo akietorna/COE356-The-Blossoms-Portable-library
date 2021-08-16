@@ -10,7 +10,7 @@ class SignUpCodeConfirmationState extends StatefulWidget {
   }
 }
 
-class SignUpCodeConfirmation extends State<CodeConfirmationState> {
+class SignUpCodeConfirmation extends State<SignUpCodeConfirmationState> {
   TextEditingController codeConfirmation = TextEditingController();
   Widget codeConfirmationIcon = Icon(Icons.coronavirus);
 
@@ -54,13 +54,13 @@ class SignUpCodeConfirmation extends State<CodeConfirmationState> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  RaisedButton(
+                  ElevatedButton(
                       child: Text("Submit"),
                       onPressed: () {
                         Navigator.pushNamed(
                             context, "/forgotPassword/codeConfirmation");
                       },
-                      color: Colors.red),
+                      ),
                   Container(
                     margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
                     child: GestureDetector(

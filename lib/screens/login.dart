@@ -16,35 +16,38 @@ class LoginPageState extends StatefulWidget {
 }
 
 class LoginPage extends State<LoginPageState> {
+
+  bool _obscurity = true;
+
+  Widget passwordSufixIcon() {
+    if (_obscurity == true) {
+      return Icon(Icons.visibility_off);
+    } else {
+      return Icon(Icons.visibility);
+    }
+  }
+
+  void _togglePasswordView() {
+    setState(() {
+      _obscurity = !_obscurity;
+    });
+  }
+
+
   TextEditingController _userEmail = TextEditingController();
   TextEditingController _password = TextEditingController();
+
+final formKey=GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /* appBar: AppBar(
-        title: Text("Log in"),
-        centerTitle: true,
-        backgroundColor: appBarColor,
-      ),*/
+      
       body: Stack(
         children: [
-          // Container(
-          //   width: MediaQuery.of(context).size.width,
-          //   height: MediaQuery.of(context).size.height,
-          //   decoration: BoxDecoration(
-          //       image: DecorationImage(
-          //           image: AssetImage("./assets/images/loginLibrary.jpg"),
-          //           fit: BoxFit.cover,
-          //           scale: 1.2)),
-          // ),
-          // Opacity(
-          //     opacity: 0.7,
-          //     child: Container(
-          //       width: MediaQuery.of(context).size.width,
-          //       height: MediaQuery.of(context).size.height,
-          //       decoration: BoxDecoration(color: Colors.white),
-          //     )),
+          
+          
           BackgroundOverlayState("./assets/images/loginLibrary.jpg"),
 
           ListView(children: [
@@ -59,10 +62,65 @@ class LoginPage extends State<LoginPageState> {
                   ),
                   LogoImage("./assets/images/login.png"),
                   enterCredentials,
-                  TextFieldState(
-                      _userEmail, "E-mail", "Enter your e-mail", emailIcon),
-                  PasswordFieldState(_password, "Password",
-                      "Enter your password", passwordIcon),
+                  Container(
+
+
+                    child:Form(
+                    key:formKey,
+                    child: Column(
+                      children:[
+                        TextFormField(
+              autofocus: true,
+              controller: _userEmail,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  prefixIcon: Icon(Icons.email),
+                  labelText: "E-mail",
+                  hintText: "Enter your e-mail",
+                  hintStyle: TextStyle(color: hintColor))),
+
+                  TextFormField(
+                    
+            autofocus: true,
+            controller: _password,
+            obscureText: _obscurity,
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.lock),
+              suffix: InkWell(
+                  onTap: _togglePasswordView, child: passwordSufixIcon()),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.red,
+                ),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              labelText: "Password",
+              hintText: "Enter your password",
+            )
+
+
+                  ),
+                   Container(
+                            alignment: Alignment.bottomCenter,
+                            margin: EdgeInsets.only(top: 50),
+                            child: ElevatedButton(
+                                child: Text("Log in"),
+                              onPressed: null),
+                          )
+                      ]
+                    ),
+
+                  ),
+                  ),
+
+                  
+                  // TextFieldState(
+                  //     _userEmail, "E-mail", "Enter your e-mail", emailIcon),
+                  // PasswordFieldState(_password, "Password",
+                  //     "Enter your password", passwordIcon),
                   Container(
                     margin: EdgeInsets.only(top: 20),
                     child: Column(
@@ -108,14 +166,13 @@ class LoginPage extends State<LoginPageState> {
                                       )),
                                 ),
                               ]),
-                          Container(
-                            alignment: Alignment.bottomCenter,
-                            margin: EdgeInsets.only(top: 50),
-                            child: RaisedButton(
-                                child: Text("Log in"),
-                                color: ButtonColor,
-                                onPressed: null),
-                          )
+                          // Container(
+                          //   alignment: Alignment.bottomCenter,
+                          //   margin: EdgeInsets.only(top: 50),
+                          //   child: ElevatedButton(
+                          //       child: Text("Log in"),
+                          //     onPressed: null),
+                          // )
                         ]),
                   )
                 ],
