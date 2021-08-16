@@ -270,7 +270,6 @@ def home_page():
 
 
 @app.route('/get_comment/',methods=["GET","POST"])
-# @logged_in_required
 def get_comment():
     d = {}
     try:
@@ -290,7 +289,6 @@ def get_comment():
 
 
 @app.route('/comments/',methods=["GET","POST"])
-#@login_required
 def comments():
     d = {}
     if request.method =='POST':
