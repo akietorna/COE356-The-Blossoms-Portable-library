@@ -14,7 +14,7 @@ class Courses extends StatefulWidget {
 
 class _CoursesState extends State<Courses> with TickerProviderStateMixin{
 
-  late TabController _controller;
+  TabController _controller;
   int _initialTabIndex = 0;
   var _foundPrograms = [];
 
