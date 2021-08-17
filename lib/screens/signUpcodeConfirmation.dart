@@ -11,7 +11,7 @@ class SignUpCodeConfirmationState extends StatefulWidget {
 }
 
 class SignUpCodeConfirmation extends State<SignUpCodeConfirmationState> {
-  TextEditingController codeConfirmation = TextEditingController();
+  TextEditingController _confirmationCode = TextEditingController();
   Widget codeConfirmationIcon = Icon(Icons.coronavirus);
 
   @override
@@ -34,20 +34,22 @@ class SignUpCodeConfirmation extends State<SignUpCodeConfirmationState> {
               Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(15),
-                child: TextField(
-                  controller: codeConfirmation,
+                child: TextFormField(
+                  validator: (value) =>
+                      value.length == 8 ? null : "Enter sent code",
+                  controller: _confirmationCode,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.red,
-                      ),
+                          // color: Colors.red,
+                          ),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     prefixIcon: codeConfirmationIcon,
                     labelText: "Confirm code",
                     hintText: "Enter the confirmation code",
-                    hintStyle: TextStyle(color: Colors.indigoAccent),
+                    // hintStyle: TextStyle(color: Colors.indigoAccent),
                   ),
                 ),
               ),
@@ -55,13 +57,14 @@ class SignUpCodeConfirmation extends State<SignUpCodeConfirmationState> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                      child: Text("Submit"),
-                      onPressed: () {
-                        Navigator.pushNamed(
-                            context, "/forgotPassword/codeConfirmation");
-                      },
-                      ),
+                    child: Text("Submit"),
+                    onPressed: () {
+                      Navigator.pushNamed(
+                          context, "/forgotPassword/codeConfirmation");
+                    },
+                  ),
                   Container(
+                    width: 50,
                     margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
                     child: GestureDetector(
                       child: Text("Resend code"),

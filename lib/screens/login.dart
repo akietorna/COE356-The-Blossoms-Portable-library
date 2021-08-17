@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:software_engineering_project/screens/backgroundoverlay.dart";
 import 'package:software_engineering_project/screens/logo.dart';
-import 'package:software_engineering_project/screens/textfield.dart';
-import 'package:software_engineering_project/screens/passwordTextField.dart';
+// import 'package:software_engineering_project/screens/textfield.dart';
+// import 'package:software_engineering_project/screens/passwordTextField.dart';
 
 const enterCredentials = Center(child: Text("Enter your credential..."));
 
@@ -16,7 +16,6 @@ class LoginPageState extends StatefulWidget {
 }
 
 class LoginPage extends State<LoginPageState> {
-
   bool _obscurity = true;
 
   Widget passwordSufixIcon() {
@@ -33,23 +32,17 @@ class LoginPage extends State<LoginPageState> {
     });
   }
 
-
   TextEditingController _userEmail = TextEditingController();
   TextEditingController _password = TextEditingController();
 
-final formKey=GlobalKey<FormState>();
-
+  final LoginFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: Stack(
         children: [
-          
-          
           BackgroundOverlayState("./assets/images/loginLibrary.jpg"),
-
           ListView(children: [
             Container(
               margin: EdgeInsets.only(top: 30),
@@ -63,120 +56,116 @@ final formKey=GlobalKey<FormState>();
                   LogoImage("./assets/images/login.png"),
                   enterCredentials,
                   Container(
+                    child: Form(
+                      key: LoginFormKey,
+                      child: Column(children: [
 
+                        //Login user email entry point
 
-                    child:Form(
-                    key:formKey,
-                    child: Column(
-                      children:[
                         TextFormField(
-                          validator: (value)=>
-                          value.contains("@") ? null: "Enter a valid email",
-              autofocus: true,
-              controller: _userEmail,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  prefixIcon: Icon(Icons.email),
-                  labelText: "E-mail",
-                  hintText: "Enter your e-mail",
-                  hintStyle: TextStyle(color: hintColor))),
+                            validator: (value) => value.contains("@")
+                                ? null
+                                : "Enter a valid email",
+                            autofocus: true,
+                            controller: _userEmail,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                prefixIcon: Icon(Icons.email),
+                                labelText: "E-mail",
+                                hintText: "Enter your e-mail",
+                                // hintStyle: TextStyle(color: hintColor)
+                                )),
 
-                  TextFormField(
-                    validator: (value)=> value.length<8? "Password should be more than 8 characters":null,
-            autofocus: true,
-            controller: _password,
-            obscureText: _obscurity,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.lock),
-              suffix: InkWell(
-                  onTap: _togglePasswordView, child: passwordSufixIcon()),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.red,
-                ),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              labelText: "Password",
-              hintText: "Enter your password",
-            )
+                                // user password entry point
 
+                        TextFormField(
+                            validator: (value) => value.length < 8
+                                ? "Password should be more than 8 characters"
+                                : null,
+                            controller: _password,
+                            obscureText: _obscurity,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.lock),
+                              suffix: InkWell(
+                                  onTap: _togglePasswordView,
+                                  child: passwordSufixIcon()),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              labelText: "Password",
+                              hintText: "Enter your password",
+                            )),
 
-                  ),
-                   Container(
-                            alignment: Alignment.bottomCenter,
-                            margin: EdgeInsets.only(top: 50),
-                            child: ElevatedButton(
-                                child: Text("Log in"),
-                              onPressed: null),
-                          )
-                      ]
+                            // call to actions
+
+                        Container(
+                          margin: EdgeInsets.only(top: 20),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                                context, "/forgotPassword");
+                                          },
+                                          child: Container(
+                                              alignment: Alignment.center,
+                                              width: 110,
+                                              height: 30,
+                                              color: Colors.transparent,
+                                              child: Text("forgot password")),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(left: 95),
+                                        alignment: Alignment.centerRight,
+                                        child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.pushNamed(
+                                                  context, "/signup");
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                /* Icon(Icons.person_add),*/
+                                                Container(
+                                                    alignment: Alignment.center,
+                                                    width: 70,
+                                                    height: 30,
+                                                    color: Colors.transparent,
+                                                    child: Text("Sign-up")),
+                                              ],
+                                            )),
+                                      ),
+                                    ]),
+                                Container(
+                                  alignment: Alignment.bottomCenter,
+                                  margin: EdgeInsets.only(top: 50),
+                                  child: ElevatedButton(
+                                      child: Text("Log in"), onPressed: null),
+                                )
+                              ]),
+                        )
+                      ]),
                     ),
-
-                  ),
                   ),
 
-                  
                   // TextFieldState(
                   //     _userEmail, "E-mail", "Enter your e-mail", emailIcon),
                   // PasswordFieldState(_password, "Password",
                   //     "Enter your password", passwordIcon),
-                  Container(
-                    margin: EdgeInsets.only(top: 20),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                          context, "/forgotPassword");
-                                    },
-                                    child: Container(
-                                        alignment: Alignment.center,
-                                        width: 110,
-                                        height: 30,
-                                        color: Colors.transparent,
-                                        child: Text("forgot password")),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 95),
-                                  alignment: Alignment.centerRight,
-                                  child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.pushNamed(context, "/signup");
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          /* Icon(Icons.person_add),*/
-                                          Container(
-                                              alignment: Alignment.center,
-                                              width: 70,
-                                              height: 30,
-                                              color: Colors.transparent,
-                                              child: Text("Sign-up")),
-                                        ],
-                                      )),
-                                ),
-                              ]),
-                          // Container(
-                          //   alignment: Alignment.bottomCenter,
-                          //   margin: EdgeInsets.only(top: 50),
-                          //   child: ElevatedButton(
-                          //       child: Text("Log in"),
-                          //     onPressed: null),
-                          // )
-                        ]),
-                  )
                 ],
               ),
             ),

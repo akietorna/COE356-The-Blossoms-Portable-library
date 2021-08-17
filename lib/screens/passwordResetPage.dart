@@ -24,7 +24,7 @@ class PasswordReset extends State<PasswordResetState> {
       ),
       body: ListView(
         children: [
-          // LogoImage("./assets/images/.png"),
+          LogoImage("./assets/images/forgotpassword.png"),
           Center(
             child: Container(
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),

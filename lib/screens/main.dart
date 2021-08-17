@@ -23,7 +23,7 @@ void main() => runApp(MaterialApp(
         "/forgotPassword": (context) => ForgotPasswordState(),
         "/forgotPassword/codeConfirmation": (context) =>
             CodeConfirmationState(),
-            "/login/landingPage":(context) => ChosenCourse(programYearCourses['computer']['1']),
+            // "/login/landingPage":(context) => ChosenCourse(programYearCourses['computer']['1']),
       },
       title: "Blossoms",
     ));
