@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:software_engineering_project/screens/main.dart";
 import "package:software_engineering_project/screens/logo.dart";
-import "package:software_engineering_project/screens/login.dart";
-import "package:software_engineering_project/screens/textfield.dart";
+
+// import "package:software_engineering_project/screens/textfield.dart";
 import "package:software_engineering_project/screens/backgroundoverlay.dart";
 
 class ForgotPasswordState extends StatefulWidget {
@@ -34,17 +34,33 @@ class ForgotPassword extends State<ForgotPasswordState> {
                   child: Center(child: Text("Enter your email below")),
                 ),
               ),
-              TextFieldState(_email, "E-mail", "Enter your e-mail", emailIcon),
+
+              TextFormField(
+                  validator: (value) =>
+                      value.contains("@") ? null : "Enter a valid email",
+                  autofocus: true,
+                  controller: _email,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    prefixIcon: Icon(Icons.email),
+                    labelText: "E-mail",
+                    hintText: "Enter your e-mail",
+                    // hintStyle: TextStyle(color: hintColor)
+                  )),
+              // TextFieldState(_email, "E-mail", "Enter your e-mail", emailIcon),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  RaisedButton(
-                      child: Text("Submit"),
-                      onPressed: () {
-                        Navigator.pushNamed(
-                            context, "/forgotPassword/codeConfirmation");
-                      },
-                      color: ButtonColor),
+                  ElevatedButton(
+                    child: Text("Submit"),
+                    onPressed: () {
+                      Navigator.pushNamed(
+                          context, "/forgotPassword/codeConfirmation");
+                    },
+                  ),
                 ],
               )
             ]),

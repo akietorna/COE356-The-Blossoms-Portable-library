@@ -14,7 +14,7 @@ class Courses extends StatefulWidget {
 
 class _CoursesState extends State<Courses> with TickerProviderStateMixin{
 
-  late TabController _controller;
+  TabController _controller;
   int _initialTabIndex = 0;
   var _foundPrograms = [];
 
@@ -125,3 +125,20 @@ class _CoursesState extends State<Courses> with TickerProviderStateMixin{
     );
   }
 }
+
+
+//bringing scaffold it from the main to this side
+
+class scafoldIt extends StatelessWidget {
+  const scafoldIt({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        body: Courses(programYearCourses['computer']['1']),
+      ),
+    );
+  }
+}
+

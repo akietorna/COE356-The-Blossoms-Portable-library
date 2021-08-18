@@ -11,9 +11,10 @@ class ChosenCourse extends StatefulWidget {
   _ChosenCourseState createState() => _ChosenCourseState();
 }
 
-class _ChosenCourseState extends State<ChosenCourse> with TickerProviderStateMixin{
-
-  late TabController _controller;
+class _ChosenCourseState extends State<ChosenCourse>
+    with TickerProviderStateMixin {
+//TabController had late before it
+  TabController _controller;
   int _initialTabIndex = 0;
   //var _foundPrograms = [];
 
@@ -38,7 +39,6 @@ class _ChosenCourseState extends State<ChosenCourse> with TickerProviderStateMix
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -53,10 +53,10 @@ class _ChosenCourseState extends State<ChosenCourse> with TickerProviderStateMix
                     //TODO: Quick search for course
                   ],
                   title: ListTile(
-                    title: Text('course name',
-                    style: TextStyle(
-                      fontSize: 35.0
-                    ),),
+                    title: Text(
+                      'course name',
+                      style: TextStyle(fontSize: 35.0),
+                    ),
                     subtitle: Text('Course code'),
                   ),
                   expandedHeight: 130.0,
@@ -77,9 +77,7 @@ class _ChosenCourseState extends State<ChosenCourse> with TickerProviderStateMix
                       Tab(
                         child: Text('Prep'),
                       ),
-                      Tab(
-                          child: Text('Videos')
-                      ),
+                      Tab(child: Text('Videos')),
                       Tab(
                         child: Text('extras'),
                       )
@@ -91,7 +89,6 @@ class _ChosenCourseState extends State<ChosenCourse> with TickerProviderStateMix
             body: TabBarView(
               controller: _controller,
               children: [
-
                 Container(
                   color: Colors.pinkAccent,
                 ),
