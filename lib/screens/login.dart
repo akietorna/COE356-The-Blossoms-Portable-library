@@ -1,6 +1,9 @@
 import "package:flutter/material.dart";
 import "package:software_engineering_project/screens/backgroundoverlay.dart";
+import 'package:software_engineering_project/screens/httpForLoginAndSignup.dart';
 import 'package:software_engineering_project/screens/logo.dart';
+import "package:http/http.dart" as http;
+
 // import 'package:software_engineering_project/screens/textfield.dart';
 // import 'package:software_engineering_project/screens/passwordTextField.dart';
 
@@ -154,7 +157,10 @@ class LoginPage extends State<LoginPageState> {
                                   alignment: Alignment.bottomCenter,
                                   margin: EdgeInsets.only(top: 50),
                                   child: ElevatedButton(
-                                      child: Text("Log in"), onPressed: null),
+                                      child: Text("Log in"),
+                                       onPressed: () async {
+                                        await HttpService.login(_userEmail,_password,context);
+                                      }),
                                 )
                               ]),
                         )
