@@ -20,9 +20,6 @@ app.config['DEBUG'] = True
 #takes care of encrypting
 bcrypt = Bcrypt()
 
-
-
-
 # this  function sends a confirmatory code to the user
 @app.route("/confirm_email/", methods=['GET','POST'])
 def confirm_email():
@@ -39,7 +36,6 @@ def confirm_email():
         confirmation_code += str(random.randint(0,9))
 
     
-
     msg = MIMEText(" Hello "+ name + " ! \n \n You signed up an account on the .To confirm that it was really you, please enter the confirmatory code  into the box provided. Thank you \n \n \t \t Confirmatory Code: "+ confirmation_code  +"\n \n  But if it was not you can ignore this mail sent to you ")
     msg['Subject'] = 'PRC AG website sign up email confirmation'
     msg['From'] = 'pentecostalrevivalcenterag@gmail.com'
@@ -98,7 +94,6 @@ def confirm_coded():
 
 
 @app.route('/sign_up_page/',methods=["GET","POST"])
-
 def sign_up():
     info ={}
     if request.method =='POST':
@@ -111,10 +106,7 @@ def sign_up():
 
         bcrypt = Bcrypt()
         session["password"] = bcrypt.generate_password_hash(request_info["password"])
-
         
-
-            
 
         curs,connect = connection()
 
@@ -124,8 +116,8 @@ def sign_up():
         check_name = curs.execute("SELECT * FROM users WHERE email = %s ", [session["email"]] )
 
         if int(check_name) > 0:
-            info['status'] = 'Email already used, please choose another one'
-            return jsonify(info), redirect(url_for('sign_up'))
+            info['status'] = 'Email already exist'
+            return jsonify(info)
 
 
         else:
@@ -158,7 +150,6 @@ def forget_password():
             confirmation_code = ""
             for a in range(0,7):
                 confirmation_code += str(random.randint(0,9))
-
             
 
             msg = MIMEText(" Hello! \n \n You requested for a reset of password on the Pentecostal Revival center,AG website.To confirm that it was really you, please enter the confirmatory code  into the box providedonthe website. Thank you \n \n \t \t Confirmatory Code: "+ confirmation_code  +"\n \n  But if it was not you can ignore this mail sent to you ")
@@ -214,9 +205,7 @@ def set_password():
         confirm_password = request.form['confirm_password']
 
         if password == confirm_password:
-
             password = bcrypt.generate_password_hash(password)
-
             curs, connect = connection()
             curs.execute("update users set password = (%s)  WHERE username = (%s)",[password,username])
             info['status'] = 'Password sucessfully resetted'
@@ -238,34 +227,24 @@ def set_password():
 def home_page():
     d = {}
     if request.method =='POST':
-
-        username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
-
         curs, connect = connection()
-        info = curs.execute("SELECT * FROM users WHERE username = %s", [username])
+        info = curs.execute("SELECT * FROM users WHERE email = %s", [email])
 
         # fetching the password
-
-        curs.execute("SELECT password FROM users WHERE username = %s", [username])
-        
+        curs.execute("SELECT password FROM users WHERE email = %s", [email])        
         Passwd = curs.fetchone()[0]
-
         curs.close()
         connect.close()
-        
-
-        # checking if the password valid
-
-        
-
+                
         if info == 1 and bcrypt.check_password_hash(Passwd,password ) == True :
             session['logged_in'] = True
-            d["status"] = "Log in was succesful"
+            d["status"] = "Log in succesfully"
             return jsonify(d)
 
         else:
-            d['status'] = "Your credentials are invalid, try again" 
+            d['status'] = "Invalid credentials, try again" 
             return jsonify(d)
 
 
@@ -295,15 +274,13 @@ def comments():
         sender_name = request.form['sender']
         comments= request.form['comment']
         contact = request.form['contact']
-
         time_sent = datetime.now()
 
-        curs,connect = connection()
-                    
+
+        curs,connect = connection()                    
         input_statement = ("INSERT INTO comments(sender_name,time_sent,contact,comment) VALUES (%s,%s,%s,%s)" ) 
         data = [sender_name, time_sent,contact, comments]
         curs.execute( input_statement, data)
-
         connect.commit()
         curs.close()
         connect.close()
@@ -320,18 +297,13 @@ def comments():
 
 
 @app.route('/notes/',methods=["GET","POST"])
-#@logged_in_required
 def notes():
     d = {}
     try:
         curs, connect = connection()
         curs.execute('SELECT * FROM testimony')
-        data = curs.fetchall()
-        
-        data = reversed(data)
-
-
-
+        data = curs.fetchall()        
+        data = reversed(data)        
         return jsonify(data)
 
     except Exception as e:
