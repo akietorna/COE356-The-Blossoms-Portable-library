@@ -42,14 +42,14 @@ class SignupPage extends State<SignupPageState> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        /*appBar: AppBar(
+        appBar: AppBar(
           title: Text("Sign-up"),
           centerTitle: true,
-          backgroundColor: appBarColor,
-        ),*/
+          //backgroundColor: appBarColor,
+        ),
         body: Stack(
       children: [
-        BackgroundOverlayState("./assets/images/signupLibrary.jpg"),
+        //BackgroundOverlayState("./assets/images/signupLibrary.jpg"),
         ListView(
           children: [
             LogoImage("./assets/images/signup.png"),

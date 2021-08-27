@@ -19,7 +19,6 @@ class _BottomNavigationBarWidget extends State<BottomNavigationBarState> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-
       currentIndex: _selectedIndex,
       unselectedFontSize: 12,
       selectedFontSize: 14,
@@ -51,7 +50,7 @@ class _BottomNavigationBarWidget extends State<BottomNavigationBarState> {
             Navigator.pushNamed(context, "");
             break;
           case 2:
-            Navigator.pushNamed(context, "");
+            Navigator.pushNamed(context, "/login/landingPage");
             break;
           case 3:
             Navigator.pushNamed(context, "");

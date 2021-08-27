@@ -4,16 +4,13 @@ import 'availablePrograms.dart';
 class Courses extends StatefulWidget {
   List list_of_courses;
 
-  Courses (this.list_of_courses);
+  Courses(this.list_of_courses);
 
   @override
   State<Courses> createState() => _CoursesState();
 }
 
-
-
-class _CoursesState extends State<Courses> with TickerProviderStateMixin{
-
+class _CoursesState extends State<Courses> with TickerProviderStateMixin {
   TabController _controller;
   int _initialTabIndex = 0;
   var _foundPrograms = [];
@@ -77,44 +74,38 @@ class _CoursesState extends State<Courses> with TickerProviderStateMixin{
             body: TabBarView(
               controller: _controller,
               children: [
-
                 ListView.builder(
                     itemCount: widget.list_of_courses[0].length,
-                    itemBuilder: (BuildContext context, int index){
+                    itemBuilder: (BuildContext context, int index) {
                       return Card(
                         child: Container(
                           child: ListTile(
-                            onTap: (){
-                              print('course ${courses_materials[widget.list_of_courses[0][index]]
-                              ['about']['name']} was pressed');
+                            onTap: () {
+                              print(
+                                  'course ${courses_materials[widget.list_of_courses[0][index]]['about']['name']} was pressed');
                             },
                             title: Text(widget.list_of_courses[0][index]),
-                            subtitle: Text(courses_materials[widget.list_of_courses[0][index]]
-                            ['about']['name']),
-                            trailing: Icon(
-                                Icons.download_outlined
-                            ),
+                            subtitle: Text(courses_materials[widget
+                                .list_of_courses[0][index]]['about']['name']),
+                            trailing: Icon(Icons.download_outlined),
                           ),
                         ),
                       );
                     }),
-
                 ListView.builder(
                     itemCount: widget.list_of_courses[1].length,
-                    itemBuilder: (BuildContext context, int index){
+                    itemBuilder: (BuildContext context, int index) {
                       return Card(
                         child: Container(
                           child: ListTile(
-                            onTap: (){
-                              print('course ${courses_materials[widget.list_of_courses[1][index]]
-                              ['about']['name']} was pressed');
+                            onTap: () {
+                              print(
+                                  'course ${courses_materials[widget.list_of_courses[1][index]]['about']['name']} was pressed');
                             },
                             title: Text(widget.list_of_courses[1][index]),
-                            subtitle: Text(courses_materials[widget.list_of_courses[1][index]]
-                            ['about']['name']),
-                            trailing: Icon(
-                                Icons.download_outlined
-                            ),
+                            subtitle: Text(courses_materials[widget
+                                .list_of_courses[1][index]]['about']['name']),
+                            trailing: Icon(Icons.download_outlined),
                           ),
                         ),
                       );
@@ -125,7 +116,6 @@ class _CoursesState extends State<Courses> with TickerProviderStateMixin{
     );
   }
 }
-
 
 //bringing scaffold it from the main to this side
 
@@ -141,4 +131,3 @@ class scafoldIt extends StatelessWidget {
     );
   }
 }
-

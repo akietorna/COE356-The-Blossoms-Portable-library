@@ -45,7 +45,7 @@ class LoginPage extends State<LoginPageState> {
     return Scaffold(
       body: Stack(
         children: [
-          BackgroundOverlayState("./assets/images/loginLibrary.jpg"),
+          //BackgroundOverlayState("./assets/images/loginLibrary.jpg"),
           ListView(children: [
             Container(
               margin: EdgeInsets.only(top: 30),
