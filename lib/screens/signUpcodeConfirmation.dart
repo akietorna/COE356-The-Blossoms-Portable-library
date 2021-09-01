@@ -20,7 +20,7 @@ class SignUpCodeConfirmation extends State<SignUpCodeConfirmationState> {
         appBar: AppBar(
           title: Text("Confirm code"),
           centerTitle: true,
-          backgroundColor: appBarColor,
+         // backgroundColor: appBarColor,
         ),
         body: Stack(
           children: [
@@ -42,7 +42,7 @@ class SignUpCodeConfirmation extends State<SignUpCodeConfirmationState> {
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                          // color: Colors.red,
+                          
                           ),
                       borderRadius: BorderRadius.circular(10.0),
                     ),

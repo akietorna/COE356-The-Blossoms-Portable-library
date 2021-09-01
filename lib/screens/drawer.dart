@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 
-
-
-class DrawerState extends StatefulWidget{
+class DrawerState extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return NavDrawer();
   }
-
-
 }
 
 class NavDrawer extends State<DrawerState> {
   @override
-  Widget build(BuildContext context){
-
+  Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,

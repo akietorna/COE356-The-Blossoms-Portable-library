@@ -20,7 +20,7 @@ class PasswordReset extends State<PasswordResetState> {
       appBar: AppBar(
         title: Text("Password reset"),
         centerTitle: true,
-        backgroundColor: appBarColor,
+       // backgroundColor: appBarColor,
       ),
       body: ListView(
         children: [
@@ -38,12 +38,13 @@ class PasswordReset extends State<PasswordResetState> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              RaisedButton(
+              ElevatedButton(
                   child: Text("Confirm"),
                   onPressed: () {
                     Navigator.pushNamed(context, "/");
                   },
-                  color: Colors.red),
+                 
+                  ),
             ],
           )
         ],
