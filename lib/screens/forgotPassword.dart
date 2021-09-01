@@ -21,11 +21,11 @@ class ForgotPassword extends State<ForgotPasswordState> {
         appBar: AppBar(
           title: Text("Forgot password"),
           centerTitle: true,
-          backgroundColor: appBarColor,
+         // backgroundColor: appBarColor,
         ),
         body: Stack(
           children: [
-            BackgroundOverlayState("./assets/images/forgotpassword.jpg"),
+           // BackgroundOverlayState("./assets/images/forgotpassword.jpg"),
             ListView(children: [
               LogoImage("./assets/images/forgotpassword.png"),
               Center(

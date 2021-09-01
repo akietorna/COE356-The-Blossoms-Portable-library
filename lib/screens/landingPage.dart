@@ -14,10 +14,8 @@ class LandingPage extends State<LandingPageState> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-
         drawer: DrawerState(),
         bottomNavigationBar: BottomNavigationBarState(),
-
       ),
     );
   }

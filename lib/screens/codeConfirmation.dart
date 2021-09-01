@@ -20,7 +20,7 @@ class CodeConfirmation extends State<CodeConfirmationState> {
         appBar: AppBar(
           title: Text("Confirm code"),
           centerTitle: true,
-          backgroundColor: appBarColor,
+         // backgroundColor: appBarColor,
         ),
         body: Stack(
           children: [

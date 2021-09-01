@@ -45,7 +45,7 @@ class LoginPage extends State<LoginPageState> {
     return Scaffold(
       body: Stack(
         children: [
-          BackgroundOverlayState("./assets/images/loginLibrary.jpg"),
+          //BackgroundOverlayState("./assets/images/loginLibrary.jpg"),
           ListView(children: [
             Container(
               margin: EdgeInsets.only(top: 30),
@@ -62,7 +62,6 @@ class LoginPage extends State<LoginPageState> {
                     child: Form(
                       key: LoginFormKey,
                       child: Column(children: [
-
                         //Login user email entry point
 
                         TextFormField(
@@ -72,17 +71,17 @@ class LoginPage extends State<LoginPageState> {
                             autofocus: true,
                             controller: _userEmail,
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                prefixIcon: Icon(Icons.email),
-                                labelText: "E-mail",
-                                hintText: "Enter your e-mail",
-                                // hintStyle: TextStyle(color: hintColor)
-                                )),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              prefixIcon: Icon(Icons.email),
+                              labelText: "E-mail",
+                              hintText: "Enter your e-mail",
+                              // hintStyle: TextStyle(color: hintColor)
+                            )),
 
-                                // user password entry point
+                        // user password entry point
 
                         TextFormField(
                             validator: (value) => value.length < 8
@@ -105,7 +104,7 @@ class LoginPage extends State<LoginPageState> {
                               hintText: "Enter your password",
                             )),
 
-                            // call to actions
+                        // call to actions
 
                         Container(
                           margin: EdgeInsets.only(top: 20),
@@ -158,8 +157,9 @@ class LoginPage extends State<LoginPageState> {
                                   margin: EdgeInsets.only(top: 50),
                                   child: ElevatedButton(
                                       child: Text("Log in"),
-                                       onPressed: () async {
-                                        await HttpService.login(_userEmail,_password,context);
+                                      onPressed: () async {
+                                        await HttpService.login(
+                                            _userEmail, _password, context);
                                       }),
                                 )
                               ]),
