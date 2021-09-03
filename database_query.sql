@@ -6,7 +6,7 @@ create table courses(course_code varchar(10) not null primary key , name varchar
 create table books_courses(id int not null,course_code varchar(10) not null );
 alter table books_courses add foreign key (id) references books(id);
 alter table books_courses add foreign key (course_code) references courses(course_code);
-create table preps(id int not null primary key auto_increment, link varchar(500),name varchar(100));
+create table preps(id int not null primary key auto_increment, link varchar(500),name varchar(100), course_code varchar(6));
 create table programs(name varchar(50) not null primary key, about varchar(1000),department varchar(100),faculty varchar(100));
 create table programs_courses(name varchar(50) not null primary key,sem int(2),course_code varchar(10));
 alter table programs_courses add foreign key (name) references programs(name);
