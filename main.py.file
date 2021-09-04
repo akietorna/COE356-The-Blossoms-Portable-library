@@ -1,0 +1,40 @@
+from flask import Flask,request
+from sqlalchemy import SQLAlchemy
+from datetime import datetime,timedelta
+import time
+
+# comments and suggestions
+app = Flask(__name__)
+app.config['SQLACHEMY_DATABASE_URI']='sqlite:///test.db'
+db=SQLAlchemy(app)
+
+
+class Comsugg(db.Model):
+        __tablename__ = 'suggest'
+        id = db.column(db.Integer, primary_key=True)
+        comments=db.column(db.text())
+        date=db.column(db.DateTime(timezone = True), default=datetime.utcnow)
+
+
+
+@app.route('/submit',methods=['POST'])
+def comments ():
+    if request.method== 'POST':
+        comment=request.form['commments']
+        return id, comment,"   ",datetime.utcnow()
+
+# reminder
+
+
+
+@app.route('/setreminder')
+def reminder():
+    currentTime = datetime.now()
+
+    alarmH = request.form['Hours']
+    alarmM = request.form['Minutes']
+    futureTime = currentTime + timedelta(hours=alarmH, minutes=alarmM)
+    return "time to close is", futureTime
+
+
+
