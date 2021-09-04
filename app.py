@@ -87,7 +87,7 @@ def confirm_coded():
             session['logged_in'] = True
             info['status'] = 'You are successfully logged in'
 
-            jsonify()
+            jsonify(info)
 
             return url_for("select_program")
 
@@ -191,6 +191,7 @@ def confirm_reset():
         else:
             info['status'] = 'You typed the wrong confirmatory code'
             return jsonify(info)
+    return jsonify('i')
 
 
 @app.route('/set_password/', methods=["GET", "POST"])
@@ -241,56 +242,37 @@ def home_page():
         else:
             d['status'] = "Invalid credentials, try again"
             return jsonify(d)
+    return jsonify('its working')
 
 
 @app.route('/get_slides/', methods=["GET", "POST"])
 def getslides():
     d = {}
     try:
-        if request.method == 'POST':
-            course_code = request.args.id
-            curs, connect = connection()
-            curs.execute(
-                "SELECT * from slides where course_code = %s", [course_code])
-            data = curs.fetchall()
+        curs, connect = connection()
+        curs.execute(
+            "SELECT * from slides")
+        data = curs.fetchall()
 
-            return jsonify(data)
+        return jsonify(data)
 
     except Exception as e:
-        d['status'] = 'Error getting slides'
+        d['status'] = 'Error getting courses'
         return jsonify(d)
 
 
 @app.route('/get_books/', methods=["GET", "POST"])
 def getbooks():
     d = {}
-
-    if request.method == 'POST':
-        course_id = request.args.id
-        curs, connect = connection()
-        curs.execute('SELECT * from slides where id = %s', [course_id])
-        data = curs.fetchall()
-
-        return jsonify(data)
-
-    else:
-        d['status'] = 'Error getting books'
-        return jsonify(d)
-
-
-@app.route('/get_courses/', methods=["GET", "POST"])
-def getcourses():
-    d = {}
-
-    if request.method == 'POST':
-        course_code = request.args.id
+    try:
         curs, connect = connection()
         curs.execute(
-            "SELECT * from slides where course_code = %s", [course_code])
+            "SELECT * from books")
         data = curs.fetchall()
 
         return jsonify(data)
-    else:
+
+    except Exception as e:
         d['status'] = 'Error getting courses'
         return jsonify(d)
 
@@ -298,34 +280,49 @@ def getcourses():
 @app.route('/get_courses/', methods=["GET", "POST"])
 def getcourses():
     d = {}
-
-    if request.method == 'POST':
-        course_code = request.args.id
+    try:
         curs, connect = connection()
         curs.execute(
-            "SELECT * from slides where course_code = %s", [course_code])
+            "SELECT * from courses")
         data = curs.fetchall()
 
         return jsonify(data)
-    else:
+
+    except Exception as e:
         d['status'] = 'Error getting courses'
         return jsonify(d)
+
+
+# @app.route('/get_courses/', methods=["GET", "POST"])
+# def getcourses():
+#     d = {}
+
+#     if request.method == 'POST':
+#         course_code = request.args.id
+#         curs, connect = connection()
+#         curs.execute(
+#             "SELECT * from slides where course_code = %s", [course_code])
+#         data = curs.fetchall()
+
+#         return jsonify(data)
+#     else:
+#         d['status'] = 'Error getting courses'
+#         return jsonify(d)
 
 
 @app.route('/get_preps/', methods=["GET", "POST"])
 def getpreps():
     d = {}
-
-    if request.method == 'POST':
-        course_id = request.args.id
+    try:
         curs, connect = connection()
         curs.execute(
-            "SELECT * from preps where course_code = %s", [course_code])
+            "SELECT * from preps")
         data = curs.fetchall()
 
         return jsonify(data)
-    else:
-        d['status'] = 'Error getting preps'
+
+    except Exception as e:
+        d['status'] = 'Error getting courses'
         return jsonify(d)
 
 
@@ -335,7 +332,7 @@ def getprojects():
     try:
         curs, connect = connection()
         curs.execute(
-            "SELECT * from projects")
+            "SELECT * from project")
         data = curs.fetchall()
 
         return jsonify(data)
@@ -378,12 +375,12 @@ def slides():
         connect.close()
         gc.collect()
 
-        d['status'] = 'post sucessfull'
+        d['status'] = 'Post sucessfull'
 
         return jsonify(d)
 
     else:
-        d['status'] = 'error posting'
+        d['status'] = 'Error posting'
         return jsonify(d)
 
 
@@ -407,12 +404,12 @@ def books():
         connect.close()
         gc.collect()
 
-        d['status'] = 'post sucessfull'
+        d['status'] = 'Post sucessfull'
 
         return jsonify(d)
 
     else:
-        d['status'] = 'error posting'
+        d['status'] = 'Error posting'
         return jsonify(d)
 
 
@@ -434,12 +431,12 @@ def courses():
         connect.close()
         gc.collect()
 
-        d['status'] = 'post sucessfull'
+        d['status'] = 'Post sucessfull'
 
         return jsonify(d)
 
     else:
-        d['status'] = 'error posting'
+        d['status'] = 'Error posting'
         return jsonify(d)
 
 
@@ -459,12 +456,12 @@ def preps():
         connect.close()
         gc.collect()
 
-        d['status'] = 'post sucessfull'
+        d['status'] = 'Post sucessfull'
 
         return jsonify(d)
 
     else:
-        d['status'] = 'error posting'
+        d['status'] = 'Error posting'
         return jsonify(d)
 
 
@@ -484,12 +481,12 @@ def projects():
         connect.close()
         gc.collect()
 
-        d['status'] = 'post sucessfull'
+        d['status'] = 'Post sucessfull'
 
         return jsonify(d)
 
     else:
-        d['status'] = 'error posting'
+        d['status'] = 'Error posting'
         return jsonify(d)
 
 
@@ -511,12 +508,12 @@ def videos():
         connect.close()
         gc.collect()
 
-        d['status'] = 'post sucessfull'
+        d['status'] = 'Post sucessfull'
 
         return jsonify(d)
 
     else:
-        d['status'] = 'error posting'
+        d['status'] = 'Error posting'
         return jsonify(d)
 
 
