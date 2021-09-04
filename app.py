@@ -38,9 +38,9 @@ def confirm_email():
     for a in range(0, 7):
         confirmation_code += str(random.randint(0, 9))
 
-    msg = MIMEText(" Hello " + name + " ! \n \n You signed up an account on the .To confirm that it was really you, please enter the confirmatory code  into the box provided. Thank you \n \n \t \t Confirmatory Code: " +
+    msg = MIMEText(" Hello " + name + " ! \n \n You signed up an account on the Portable library .To confirm that it was really you, please enter the confirmatory code  into the box provided. Thank you \n \n \t \t Confirmatory Code: " +
                    confirmation_code + "\n \n  But if it was not you can ignore this mail sent to you ")
-    msg['Subject'] = 'PRC AG website sign up email confirmation'
+    msg['Subject'] = 'Portable library email confirmation'
     msg['From'] = 'pentecostalrevivalcenterag@gmail.com'
     msg['To'] = session["email"]
 
@@ -154,7 +154,7 @@ def forget_password():
 
             msg = MIMEText(" Hello! \n \n You requested for a reset of password on the Pentecostal Revival center,AG website.To confirm that it was really you, please enter the confirmatory code  into the box providedonthe website. Thank you \n \n \t \t Confirmatory Code: " +
                            confirmation_code + "\n \n  But if it was not you can ignore this mail sent to you ")
-            msg['Subject'] = 'PRC AG website sign up email confirmation'
+            msg['Subject'] = 'Portable library email confirmation'
             msg['From'] = 'pentecostalrevivalcenterag@gmail.com'
             msg['To'] = email
 
