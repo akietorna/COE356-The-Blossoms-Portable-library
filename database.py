@@ -9,10 +9,10 @@ import MySQLdb.cursors
 #app.config['SECRET_KEY'] = 'hispresence123@'
 
 def connection():
-    connect = MySQLdb.connect(host="localhost",
-                              user="root",
+    connect = MySQLdb.connect(host="theblossoms.mysql.pythonanywhere-services.com",
+                              user="theblossoms",
                               passwd="hispresence123@",
-                              db="library")
+                              db="theblossoms$library")
 # innitializing the cursor
     curs = connect.cursor()
 
