@@ -100,16 +100,15 @@ def confirm_coded():
 def sign_up():
     info = {}
     if request.method == 'POST':
-        request_info = request.get_json()
 
-        session["firstname"] = request_info["firstname"]
-        session["lastname"] = request_info["lastname"]
-        session["username"] = request_info["username"]
-        session["email"] = request_info["email"]
+        session["firstname"] = request.form["firstname"]
+        session["lastname"] = request.form["lastname"]
+        session["username"] = request.form["username"]
+        session["email"] = request.form["email"]
 
         bcrypt = Bcrypt()
         session["password"] = bcrypt.generate_password_hash(
-            request_info["password"])
+            request.form["password"])
 
         curs, connect = connection()
 
@@ -124,6 +123,8 @@ def sign_up():
 
         else:
             return redirect(url_for("confirm_email"))
+
+    return render_template('sign_up_page.html')
 
 
 @app.route("/forget_password/", methods=["POST", "GET"])
