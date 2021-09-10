@@ -1,4 +1,4 @@
-from blossoms.settings import *
+from settings import *
 
 
 # the class Movie will inherit the db.Model of SQLAlchemy
@@ -9,8 +9,6 @@ class Slides(db.Model):
     link = db.Column(db.String(500), nullable=False)
     # nullable is false so the column can't be empty
     course_code = db.Column(db.String(10), nullable=False)  # todo foreign key
-
-
 
     def json(self):
         return {'id': self.id, 'title': self.title,

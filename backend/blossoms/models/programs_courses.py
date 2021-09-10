@@ -1,4 +1,4 @@
-from blossoms.settings import *
+from settings import *
 
 
 # the class Movie will inherit the db.Model of SQLAlchemy
@@ -12,17 +12,16 @@ class Programs_courses(db.Model):
 
     def json_books(self):
         return {
-                'name': self.name,
-                'link': self.link,
-                'isbn':self.isbn,
-                'author':self.author,
-                'publisher':self.publisher
-            }
+            'name': self.name,
+            'link': self.link,
+            'isbn': self.isbn,
+            'author': self.author,
+            'publisher': self.publisher
+        }
 
-
-
-    def add_book(_name,_link, _isbn=' ', _author=' ', _publisher=' '):
-        new_course = Books(name = _name, link= _link, isbn= _isbn, author= _author, publisher = _publisher)
+    def add_book(_name, _link, _isbn=' ', _author=' ', _publisher=' '):
+        new_course = Books(name=_name, link=_link, isbn=_isbn,
+                           author=_author, publisher=_publisher)
         db.session.add(new_course)
         db.session.commit()
 
@@ -30,9 +29,9 @@ class Programs_courses(db.Model):
         return [Books.json_books(book) for book in Books.query.all()]
 
     def get_book(_link):
-        result = Books.query.filter_by(link = _link).first()
+        result = Books.query.filter_by(link=_link).first()
         print(result)
-        if result==None:
+        if result == None:
             return []
         return [Books.json_books(result)]
 
@@ -42,11 +41,9 @@ class Programs_courses(db.Model):
         book_to_update.link = _link
         db.session.commit()
 
-
     def delete_book(_link):
         Books.query.filter_by(link=_link).delete()
         db.session.commit()
-
 
 
 if __name__ == '__main__':

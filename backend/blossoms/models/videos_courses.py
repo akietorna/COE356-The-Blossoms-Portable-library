@@ -1,4 +1,4 @@
-from blossoms.settings import *
+from settings import *
 
 
 # the class Movie will inherit the db.Model of SQLAlchemy
@@ -24,10 +24,6 @@ class Videos_courses(db.Model):
         self.create_slides_table()
         self.create_videos_courses_table()
         self.create_books_courses_table()
-
-
-
-
 
     def json(self):
         return {'id': self.id, 'title': self.title,

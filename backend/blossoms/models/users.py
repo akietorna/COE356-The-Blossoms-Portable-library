@@ -1,10 +1,11 @@
-from blossoms.settings import *
+import settings
+from settings import *
 
 # the class Movie will inherit the db.Model of SQLAlchemy
 
 
 class Users(db.Model):
-    __tablename__ = 'users'  # creating a table name
+    __tablename__ = "users"  # creating a table name
     user_id = db.Column(db.Integer, primary_key=True,
                         nullable=False)  # this is the primary key
     first_name = db.Column(db.String(50), nullable=False)
@@ -24,13 +25,13 @@ class Users(db.Model):
         }
 
     def add_user(_first_name, _last_name, _user_name, _email, _password):
-        new_user = Users(firstname=_first_name, lastname=_last_name,
+        new_user = Users(first_name=_first_name, last_name=_last_name,
                          user_name=_user_name, email=_email, password=_password)
         db.session.add(new_user)
         db.session.commit()
 
-    def get_all_users(i=None):
-        return [Books.json_users(users) for users in Users.query.all()]
+    def get_all_users():
+        return [Users.json_users(users) for users in Users.query.all()]
 
     def get_user(_user_name):
         result = Users.query.filter_by(user_name=_user_name).first()
@@ -58,4 +59,5 @@ class Users(db.Model):
 
 
 if __name__ == '__main__':
-    db.create_all()
+    # db.create_all()
+    print(Users.get_all_users())

@@ -11,11 +11,12 @@ import smtplib
 import ssl
 from email.mime.text import MIMEText
 import random
-from blossoms.models.courses_model import *
-from blossoms.models.books_model import *
-from blossoms.models.books_courses import *
-from blossoms.models.programs_model import *
-from blossoms.models.videos_model import *
+from models.courses_model import *
+from models.books_model import *
+from models.books_courses import *
+from models.programs_model import *
+from models.videos_model import *
+from models.users import *
 
 bcrypt = Bcrypt()
 
@@ -233,25 +234,25 @@ def remove_video():
     return response
 
 
-@app.route('/sign_up_page', methods=["GET", "POST"])
+@app.route('/sign_up', methods=["GET", "POST"])
 def sign_up():
     info = {}
     if request.method == 'POST':
 
         request_data = request.get_json()
-        user_details["first_name"] = request.data["first_name"]
-        user_details["last_name"] = request.data["last_name"]
-        user_details["user_name"] = request.data["user_name"]
-        user_details["email"] = request.data["email"]
+        user_details["first_name"] = request_data["first_name"]
+        user_details["last_name"] = request_data["last_name"]
+        user_details["user_name"] = request_data["user_name"]
+        user_details["email"] = request_data["email"]
 
         user_details["password"] = bcrypt.generate_password_hash(
-            request.data["password"])
+            request_data["password"])
 
         # checking if the username matches that of another person
 
         check_name = Users.get_user(_user_name=user_details['user_name'])
 
-        if int(check_name) > 0:
+        if len(check_name) > 0:
             info['status'] = 'Email already exist'
             return jsonify(info)
 
@@ -275,6 +276,8 @@ def confirm_email():
     for a in range(0, 7):
         confirmation_code += str(random.randint(0, 9))
 
+    print(confirmation_code)
+
     msg = MIMEText(" Hello " + name + " ! \n \n You signed up an account on the Portable library .To confirm that it was really you, please enter the confirmatory code  into the box provided. Thank you \n \n \t \t Confirmatory Code: " +
                    confirmation_code + "\n \n  But if it was not you can ignore this mail sent to you ")
     msg['Subject'] = 'Portable library email confirmation'
@@ -285,7 +288,7 @@ def confirm_email():
 
     context = ssl.create_default_context()
 
-    with smtplib.SMTP_SSL(stmp_server, port, context=context) as server:
+    with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
         server.login(sender_email, password)
         server.sendmail(sender_email, receiver_email, msg.as_string())
         print('Mail sent')
@@ -316,6 +319,7 @@ def sign_up_confirm_code():
         else:
             info['status'] = 'Error signing up'
             return jsonify(info)
+    return jsonify('')
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -329,9 +333,9 @@ def sign_in():
 
         check_user = Users.get_user(user_name)
 
-        check_password = check_user['password']
+        print(check_user)
 
-        if info == 1 and bcrypt.check_password_hash(check_password, password) == True:
+        if check_user == 1 and bcrypt.check_password_hash(check_password[4], password) == True:
             d["status"] = "Log in succesfully"
             return redirect(url_for('get_programs')), jsonify(d)
 
@@ -432,7 +436,7 @@ def set_password():
     return jsonify()
 
 
-@app.route('/get_users', methods=['GET'])
+@app.route('/get_users', methods=['GET', "POST"])
 def get_users():
     return jsonify({'Users': Users.get_all_users()})
 
@@ -440,11 +444,11 @@ def get_users():
 @app.route('/get_users_by_name', methods=['GET'])
 def get_users_by_name():
     name = request.args.get("user_name")
-    return_value = Programs.get_program(name)
+    return_value = Users.get_user(name)
     return jsonify(return_value)
 
 
-@app.route('/add_user', methods=['POST'])
+@app.route('/add_user', methods=['POST', "GET"])
 def add_user():
     '''Function to add new user to our database'''
 
@@ -457,11 +461,11 @@ def add_user():
         email = request_data['email']
         password = bcrypt.generate_password_hash(request_data['password'])
 
-        exists = Programs.get_program(user_name)
+        exists = Users.get_user(user_name)
         print(exists)
         if len(exists) > 0:
             return jsonify('user_name already exists')
-        Programs.add_user(first_name, last_name, user_name, email, password)
+        Users.add_user(first_name, last_name, user_name, email, password)
         response = Response("User added", 201, mimetype='application/json')
         return response
     return jsonify('')
@@ -480,7 +484,7 @@ def update_user():
         email = request_data['email']
         password = bcrypt.generate_password_hash(request_data['password'])
 
-        exists = Programs.get_program(user_name)
+        exists = Users.get_user(user_name)
         if exists == []:
             return 'User does not exist'
 
@@ -494,13 +498,18 @@ def update_user():
 def remove_user():
     '''Function to delete user from our database'''
     name = request.args.get("name")
-    exists = Programs.get_program(_name=name)
+    exists = Users.get_user(_name=name)
     if exists == []:
         return 'User does not exist'
     Programs.delete_program(name)
     response = Response("User Deleted", status=200,
                         mimetype='application/json')
     return response
+
+
+@app.before_first_request
+def create_tables():
+    db.create_all()
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-from blossoms.settings import *
+from settings import *
 
 
 # the class Movie will inherit the db.Model of SQLAlchemy
