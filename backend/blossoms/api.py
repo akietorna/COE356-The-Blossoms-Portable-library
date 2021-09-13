@@ -436,9 +436,10 @@ def set_password():
     return jsonify()
 
 
-@app.route('/get_users', methods=['GET', "POST"])
+@app.route('/get_users', methods=['GET'])
 def get_users():
-    return jsonify({'Users': Users.get_all_users()})
+    print('it is okay')
+    return jsonify(Users.get_all_users())
 
 
 @app.route('/get_users_by_name', methods=['GET'])

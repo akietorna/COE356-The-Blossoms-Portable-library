@@ -1,11 +1,10 @@
-import settings
 from settings import *
 
 # the class Movie will inherit the db.Model of SQLAlchemy
 
 
 class Users(db.Model):
-    __tablename__ = "users"  # creating a table name
+    __tablename__ = "Users"  # creating a table name
     user_id = db.Column(db.Integer, primary_key=True,
                         nullable=False)  # this is the primary key
     first_name = db.Column(db.String(50), nullable=False)
@@ -31,7 +30,9 @@ class Users(db.Model):
         db.session.commit()
 
     def get_all_users():
-        return [Users.json_users(users) for users in Users.query.all()]
+        print('it is okay')
+        users_list = json_user(Users.query.all())
+        return users_list
 
     def get_user(_user_name):
         result = Users.query.filter_by(user_name=_user_name).first()
@@ -54,10 +55,9 @@ class Users(db.Model):
         db.session.commit()
 
     def delete_user(_user_name):
-        Books.query.filter_by(user_name=_user_name).delete()
+        Users.query.filter_by(user_name=_user_name).delete()
         db.session.commit()
 
 
 if __name__ == '__main__':
-    # db.create_all()
-    print(Users.get_all_users())
+    db.create_all()
