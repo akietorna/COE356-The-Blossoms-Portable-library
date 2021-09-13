@@ -438,7 +438,7 @@ def set_password():
 
 @app.route('/get_users', methods=['GET'])
 def get_users():
-    print('it is okay')
+
     return jsonify(Users.get_all_users())
 
 
@@ -489,7 +489,7 @@ def update_user():
         if exists == []:
             return 'User does not exist'
 
-        Programs.add_user(first_name, last_name, user_name, email, password)
+        Users.add_user(first_name, last_name, user_name, email, password)
         response = Response("User added", 201, mimetype='application/json')
         return response
     return jsonify('')
@@ -502,7 +502,7 @@ def remove_user():
     exists = Users.get_user(_name=name)
     if exists == []:
         return 'User does not exist'
-    Programs.delete_program(name)
+    Users.delete_program(name)
     response = Response("User Deleted", status=200,
                         mimetype='application/json')
     return response
