@@ -1,4 +1,5 @@
-from settings import *
+from blossoms.settings import *
+from blossoms.models.courses_model import *
 
 
 # the class Movie will inherit the db.Model of SQLAlchemy
@@ -12,50 +13,75 @@ class Preps(db.Model):
 
 
 
-    def json(self):
-        return {'id': self.id, 'title': self.title,
-                'year': self.year, 'genre': self.genre}
+    def json_preps(self):
+        return {'id': self.id, 'name': self.name,
+                'link': self.link, 'course_code': self.course_code}
         # this method we are defining will convert our output to json
 
-    def add_movie(_title, _year, _genre):
-        '''function to add movie to database using _title, _year, _genre
-        as parameters'''
-        # creating an instance of our Movie constructor
-        new_movie = Movie(title=_title, year=_year, genre=_genre)
-        db.session.add(new_movie)  # add new movie to database session
-        db.session.commit()  # commit changes to session
+    def add_prep(_name, _link, _course_code):
+        new_prep = Preps(link= _link, course_code= _course_code, name=_name)
 
-    def add_program(self, name, about, department):
-        pass
+        course_exists = Courses.get_course(_code= _course_code)
+        print(course_exists)
 
-    def get_all_movies(i=None):
-        '''function to get all movies in our database'''
-        return [Movie.json(movie) for movie in Movie.query.all()]
+        if len(course_exists) > 0:
+            prep_already_added = Preps.get_prep(_link=_link)
 
-    def get_movie(_id):
-        '''function to get movie using the id of the movie as parameter'''
-        return [Movie.json(Movie.query.filter_by(id=_id).first())]
-        # Movie.json() coverts our output to the json format defined earlier
-        # the filter_by method filters the query by the id
-        # since our id is unique we will only get one result
-        # the .first() method will get that first value returned
+            if len(prep_already_added) > 0:
+                return 'prep already exists'
+            db.session.add(new_prep)
+            db.session.commit()
+            print('Prep added')
+        else:
+            return 'Course doesnt exist, check it out'
 
-    def update_movie(_id, _title, _year, _genre):
-        '''function to update the details of a movie using the id, title,
-        year and genre as parameters'''
-        movie_to_update = Movie.query.filter_by(id=_id).first()
-        movie_to_update.title = _title
-        movie_to_update.year = _year
-        movie_to_update.genre = _genre
-        db.session.commit()
+    def get_all_preps(i=None):
+        return [Preps.json_preps(item) for item in Preps.query.all()]
 
-    def delete_movie(_id):
-        '''function to delete a movie from our database using
-           the id of the movie as a parameter'''
-        Movie.query.filter_by(id=_id).delete()
-        # filter movie by id and delete
-        db.session.commit()  # commiting the new change to our database
+    def get_preps_for_course(_course_code):
+        result = Preps.query.filter_by(course_code = _course_code).all()
+        print(result)
+        if result==None:
+            return []
+        return [Preps.json_preps(slide) for slide in result]
+
+    def get_prep(_link):
+        results = Preps.query.filter_by(link=_link).first()
+        print(results)
+        if results==None:
+            return []
+        return [Preps.json_preps(results)]
+
+    def update_prep(_link, _new_link, _code=None):
+        prep_added = Preps.get_prep(_link=_link)
+        if len(prep_added) > 0:
+            prep_to_update = Preps.query.filter_by(link=_link).first()
+            prep_to_update.link = _new_link
+            if _code==None:
+                pass
+            else:
+                prep_to_update.course_code = _code
+            db.session.commit()
+            print('updated')
+        else:
+            return 'Prep doesnt exist'
+
+
+    def delete_prep(_link):
+        prep_added = Preps.get_prep(_link = _link)
+        if len(prep_added) > 0:
+            Preps.query.filter_by(link=_link).delete()
+            db.session.commit()
+            print('deleted')
+        else:
+            print('Prep doesnt exist')
 
 
 if __name__ == '__main__':
-    db.create_all()
+    #db.create_all()
+    #print(Preps.add_prep(_name='ox', _link='5', _course_code='Math 351'))
+    #print(Preps.get_prep(_link='1'))
+    #print(Preps.get_preps_for_course(_course_code='Math 351'))
+    print(Preps.get_all_preps())
+    #print(Preps.update_prep(_link='2', _new_link='2'))
+    #print(Preps.delete_prep(_link='2'))

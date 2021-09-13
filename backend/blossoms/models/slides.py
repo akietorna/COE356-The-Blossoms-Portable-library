@@ -1,4 +1,5 @@
-from settings import *
+from blossoms.settings import *
+from blossoms.models.courses_model import *
 
 
 # the class Movie will inherit the db.Model of SQLAlchemy
@@ -10,50 +11,79 @@ class Slides(db.Model):
     # nullable is false so the column can't be empty
     course_code = db.Column(db.String(10), nullable=False)  # todo foreign key
 
-    def json(self):
-        return {'id': self.id, 'title': self.title,
-                'year': self.year, 'genre': self.genre}
+
+
+    def json_slides(self):
+        return {'id': self.id, 'name': self.name,
+                'link': self.link, 'course_code': self.course_code}
         # this method we are defining will convert our output to json
 
-    def add_movie(_title, _year, _genre):
-        '''function to add movie to database using _title, _year, _genre
-        as parameters'''
-        # creating an instance of our Movie constructor
-        new_movie = Movie(title=_title, year=_year, genre=_genre)
-        db.session.add(new_movie)  # add new movie to database session
-        db.session.commit()  # commit changes to session
+    def add_slide(_name, _link, _course_code):
+        new_slide = Slides(link= _link, course_code= _course_code, name=_name)
 
-    def add_program(self, name, about, department):
-        pass
+        course_exists = Courses.get_course(_code= _course_code)
+        print(course_exists)
 
-    def get_all_movies(i=None):
-        '''function to get all movies in our database'''
-        return [Movie.json(movie) for movie in Movie.query.all()]
+        if len(course_exists) > 0:
+            slide_already_added = Slides.get_slide(_link=_link)
 
-    def get_movie(_id):
-        '''function to get movie using the id of the movie as parameter'''
-        return [Movie.json(Movie.query.filter_by(id=_id).first())]
-        # Movie.json() coverts our output to the json format defined earlier
-        # the filter_by method filters the query by the id
-        # since our id is unique we will only get one result
-        # the .first() method will get that first value returned
+            if len(slide_already_added) > 0:
+                return 'Slide already added'
+            db.session.add(new_slide)
+            db.session.commit()
+            print('Slide added')
+        else:
+            return 'Course doesnt exist, check it out'
 
-    def update_movie(_id, _title, _year, _genre):
-        '''function to update the details of a movie using the id, title,
-        year and genre as parameters'''
-        movie_to_update = Movie.query.filter_by(id=_id).first()
-        movie_to_update.title = _title
-        movie_to_update.year = _year
-        movie_to_update.genre = _genre
-        db.session.commit()
+    def get_all_slides(i=None):
+        return [Slides.json_slides(slide) for slide in Slides.query.all()]
 
-    def delete_movie(_id):
-        '''function to delete a movie from our database using
-           the id of the movie as a parameter'''
-        Movie.query.filter_by(id=_id).delete()
-        # filter movie by id and delete
-        db.session.commit()  # commiting the new change to our database
+    def get_slides_for_course(_course_code):
+        result = Slides.query.filter_by(course_code = _course_code).all()
+        print(result)
+        if result==None:
+            return []
+        return [Slides.json_slides(slide) for slide in result]
+
+    def get_slide(_link):
+        results = Slides.query.filter_by(link=_link).first()
+        print(results)
+        if results==None:
+            return []
+        return [Slides.json_slides(results)]
+
+    def update_slide(_link, _new_link, _code=None):
+        slide_added = Slides.get_slide(_link=_link)
+        if len(slide_added) > 0:
+            slide_to_update = Slides.query.filter_by(link=_link).first()
+            slide_to_update.link = _new_link
+            if _code==None:
+                pass
+            else:
+                slide_to_update.course_code = _code
+            db.session.commit()
+            print('updated')
+        else:
+            return 'Slide doesnt exist'
+
+
+    def delete_slide(_link):
+        slide_added = Slides.get_slide(_link = _link)
+        if len(slide_added) > 0:
+            Slides.query.filter_by(link=_link).delete()
+            db.session.commit()
+            print('deleted')
+        else:
+            print('Slide doesnt exist')
+
 
 
 if __name__ == '__main__':
-    db.create_all()
+    #db.create_all()
+    #print(Slides.add_slide(_name='herh name', _link='4', _course_code='41'))
+    print(Slides.get_slide(_link='1'))
+    print(Slides.get_slides_for_course(_course_code='Math 351'))
+    print(Slides.get_all_slides())
+    #print(Slides.update_slide(_link='1', _new_link='2'))
+    #print(Books_courses.update_book_course(_link='2', _course_code='Math 352', _new_link='3'))
+    #print(Slides.delete_slide(_link='2'))
