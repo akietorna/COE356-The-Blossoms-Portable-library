@@ -1,5 +1,5 @@
-from settings import *
-
+from blossoms.models.courses_model import *
+from blossoms.models.videos_model import *
 
 # the class Movie will inherit the db.Model of SQLAlchemy
 class Videos_courses(db.Model):
@@ -9,66 +9,76 @@ class Videos_courses(db.Model):
     # nullable is false so the column can't be empty
     course_code = db.Column(db.String(10), nullable=False)  # todo foreign key
 
-    def create_independent_tables(self):
-        # todo programs, books, courses, videos, projects
-        self.create_programs_table()
-        self.create_books_table()
-        self.create_courses_table()
-        self.create_videos_table()
-        self.create_projects_table()
-
-    def create_dependent_tables(self):
-        # todo programs_courses, preps, slides, videos_courses, books_courses
-        self.create_programs_courses_table()
-        self.create_preps_table()
-        self.create_slides_table()
-        self.create_videos_courses_table()
-        self.create_books_courses_table()
-
-    def json(self):
-        return {'id': self.id, 'title': self.title,
-                'year': self.year, 'genre': self.genre}
+    def json_videos_courses(self):
+        return {'id': self.id,
+                'link': self.link,
+                'course_code': self.course_code}
         # this method we are defining will convert our output to json
 
-    def add_movie(_title, _year, _genre):
-        '''function to add movie to database using _title, _year, _genre
-        as parameters'''
-        # creating an instance of our Movie constructor
-        new_movie = Movie(title=_title, year=_year, genre=_genre)
-        db.session.add(new_movie)  # add new movie to database session
-        db.session.commit()  # commit changes to session
+    def add_video_course(_link, _course_code):
+        new_vid_course = Videos_courses(link= _link, course_code= _course_code)
 
-    def add_program(self, name, about, department):
-        pass
+        course_exists = Courses.get_course(_code= _course_code)
+        print(course_exists)
+        vid_exists = Videos.get_video(_link=_link)
+        print(vid_exists)
 
-    def get_all_movies(i=None):
-        '''function to get all movies in our database'''
-        return [Movie.json(movie) for movie in Movie.query.all()]
+        if len(course_exists) > 0 and len(vid_exists)>0:
+            vid_course_already_added = Videos_courses.get_vid_course_rel(_link=_link, _course_code=_course_code)
 
-    def get_movie(_id):
-        '''function to get movie using the id of the movie as parameter'''
-        return [Movie.json(Movie.query.filter_by(id=_id).first())]
-        # Movie.json() coverts our output to the json format defined earlier
-        # the filter_by method filters the query by the id
-        # since our id is unique we will only get one result
-        # the .first() method will get that first value returned
+            if len(vid_course_already_added) > 0:
+                return 'Video Course relationship already exists'
+            db.session.add(new_vid_course)
+            db.session.commit()
+            print('Video Course relation added')
+        else:
+            return 'Either of Video or Course doesnt exist, check it out'
 
-    def update_movie(_id, _title, _year, _genre):
-        '''function to update the details of a movie using the id, title,
-        year and genre as parameters'''
-        movie_to_update = Movie.query.filter_by(id=_id).first()
-        movie_to_update.title = _title
-        movie_to_update.year = _year
-        movie_to_update.genre = _genre
-        db.session.commit()
+    def get_all_vid_courses(i=None):
+        return [Videos_courses.json_videos_courses(item) for item in Videos_courses.query.all()]
 
-    def delete_movie(_id):
-        '''function to delete a movie from our database using
-           the id of the movie as a parameter'''
-        Movie.query.filter_by(id=_id).delete()
-        # filter movie by id and delete
-        db.session.commit()  # commiting the new change to our database
+    def get_vids_for_course(_course_code):
+        result = Videos_courses.query.filter_by(course_code = _course_code).all()
+        print(result)
+        if result==None:
+            return []
+        return [Videos_courses.json_videos_courses(slide) for slide in result]
+
+    def get_vid_course_rel(_link, _course_code):
+        result = Videos_courses.query.filter_by(course_code = _course_code, link=_link).first()
+        print(result)
+        if result==None:
+            return []
+        return [Videos_courses.json_videos_courses(result)]
+
+
+    def update_vid_course(_link, _new_link, _code, _new_code=None):
+        vid_course_added = Videos_courses.get_vid_course_rel(_link=_link, _course_code=_code)
+        if len(vid_course_added) > 0:
+            vid_course_to_update = Videos_courses.query.filter_by(link=_link, course_code=_code).first()
+            vid_course_to_update.link = _new_link
+            if _code==None:
+                pass
+            else:
+                vid_course_to_update.course_code = _new_code
+            db.session.commit()
+            print('updated')
+        else:
+            return 'Video_course relation doesnt exist'
+
+
+    def delete_vid_course(_link, _course):
+        vid_cousrse_added = Videos_courses.get_vid_course_rel(_link = _link, _course_code=_course)
+        if len(vid_cousrse_added) > 0:
+            Videos_courses.query.filter_by(link=_link, course_code=_course).delete()
+            db.session.commit()
+            print('deleted')
+        else:
+            print('Video Course relation doesnt exist')
 
 
 if __name__ == '__main__':
-    db.create_all()
+    #db.create_all()
+    #Videos_courses.delete_vid_course(_link='1', _course='Math 351')
+    print(Videos_courses.add_video_course(_link='1', _course_code='Math 351'))
+    #print(Videos_courses.get_all_vid_courses())

@@ -1,5 +1,5 @@
 # importing libraries
-from flask import Flask, request, Response, jsonify, json
+from flask import Flask, request, Response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import abort
 

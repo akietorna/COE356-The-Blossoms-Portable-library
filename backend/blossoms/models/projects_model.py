@@ -1,4 +1,4 @@
-from settings import *
+from blossoms.models.courses_model import *
 
 
 # the class Movie will inherit the db.Model of SQLAlchemy
@@ -7,51 +7,81 @@ class Projects(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # this is the primary key
     name = db.Column(db.String(100), nullable=False)
     link = db.Column(db.String(500), nullable=False)
+    course = db.Column(db.String(10), nullable=False)
 
-    def json(self):
-        return {'id': self.id, 'title': self.title,
-                'year': self.year, 'genre': self.genre}
+
+    def json_projects(self):
+        return {'id': self.id,
+                'name': self.name,
+                'course_code': self.course,
+                'link':self.link}
         # this method we are defining will convert our output to json
 
-    def add_movie(_title, _year, _genre):
-        '''function to add movie to database using _title, _year, _genre
-        as parameters'''
-        # creating an instance of our Movie constructor
-        new_movie = Movie(title=_title, year=_year, genre=_genre)
-        db.session.add(new_movie)  # add new movie to database session
-        db.session.commit()  # commit changes to session
+    def add_projects(_name, _course_code, _link):
+        new_project = Projects(course= _course_code, name=_name, link=_link)
 
-    def add_program(self, name, about, department):
-        pass
+        course_exists = Courses.get_course(_code= _course_code)
+        print(course_exists)
 
-    def get_all_movies(i=None):
-        '''function to get all movies in our database'''
-        return [Movie.json(movie) for movie in Movie.query.all()]
+        if len(course_exists)>0:
+            project_already_added = Projects.get_project(_link = _link)
 
-    def get_movie(_id):
-        '''function to get movie using the id of the movie as parameter'''
-        return [Movie.json(Movie.query.filter_by(id=_id).first())]
-        # Movie.json() coverts our output to the json format defined earlier
-        # the filter_by method filters the query by the id
-        # since our id is unique we will only get one result
-        # the .first() method will get that first value returned
+            if len(project_already_added) > 0:
+                return 'Project already exists'
+            db.session.add(new_project)
+            db.session.commit()
+            print('Project added')
+        else:
+            return 'Course doesnt exist, check it out'
 
-    def update_movie(_id, _title, _year, _genre):
-        '''function to update the details of a movie using the id, title,
-        year and genre as parameters'''
-        movie_to_update = Movie.query.filter_by(id=_id).first()
-        movie_to_update.title = _title
-        movie_to_update.year = _year
-        movie_to_update.genre = _genre
-        db.session.commit()
+    def get_all_projects(i=None):
+        return [Projects.json_projects(item) for item in Projects.query.all()]
 
-    def delete_movie(_id):
-        '''function to delete a movie from our database using
-           the id of the movie as a parameter'''
-        Movie.query.filter_by(id=_id).delete()
-        # filter movie by id and delete
-        db.session.commit()  # commiting the new change to our database
+    def get_project(_link):
+        result = Projects.query.filter_by(link = _link).first()
+        print(result)
+        if result==None:
+            return []
+        return [Projects.json_projects(result)]
 
+    def get_projects_for_course(_course_code):
+        result = Projects.query.filter_by(course = _course_code).all()
+        print(result)
+        if result==None:
+            return []
+        return [Projects.json_projects(item) for item in result]
+
+
+    def update_project(_link, _new_code=None, _new_link=None, _new_name=None):
+        project_added = Projects.get_project(_link=_link)
+        if len(project_added) > 0:
+            project_to_update = Projects.query.filter_by(link=_link).first()
+            if _new_name!=None:
+                project_to_update.name = _new_name
+            if _new_code!=None:
+                project_to_update.course = _new_code
+            if _new_link!=None:
+                project_to_update.link = _new_link
+            db.session.commit()
+            print('updated')
+        else:
+            return 'Project doesnt exist'
+
+
+    def delete_project(_link):
+        project_added = Projects.get_project(_link=_link)
+        if len(project_added) > 0:
+            Projects.query.filter_by(link=_link).delete()
+            db.session.commit()
+            print('deleted')
+        else:
+            print('Project doesnt exist')
 
 if __name__ == '__main__':
-    db.create_all()
+    #db.create_all()
+    #print(Projects.get_project(_link='1'))
+    #print(Projects.get_all_projects())
+    #print(Projects.get_projects_for_course(_course_code='Math 352'))
+    print(Projects.update_project(_link='1'))
+    #print(Projects.delete_project(_link='1'))
+    #print(Projects.add_projects(_name='00', _course_code='Math 351', _link='3'))
