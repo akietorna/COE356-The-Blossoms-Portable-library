@@ -35,7 +35,7 @@ def confirm_email():
     sender_email = "pentecostalrevivalcenterag@gmail.com"
     receiver_email = str(userdetails["email"])
     name = userdetails['lastname']
-    password = "revmoses1954"
+    password = "revmosesasafo1954"
 
     confirmation_code = ""
     for a in range(0, 7):
@@ -151,7 +151,7 @@ def forget_password():
             sender_email = "pentecostalrevivalcenterag@gmail.com"
             receiver_email = email
             name = username
-            password = "revmoses1954"
+            password = "revmosesasafo1954"
 
             confirmation_code = ""
             for a in range(0, 7):
