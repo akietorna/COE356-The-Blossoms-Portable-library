@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect, flash, session, g, send_from_directory, abort, jsonify,json
+from flask import Flask, render_template, request, url_for, redirect, flash, session, g, send_from_directory, abort, jsonify, json
 from database import connection
 #from wtforms import Form, BooleanField, TextField, PasswordField, validators
 from flask_bcrypt import Bcrypt
@@ -23,7 +23,8 @@ bcrypt = Bcrypt(app)
 
 # this  function sends a confirmatory code to the user
 
-userdetails ={'firstname':'','lastname':'','username':'','email':'','password':'','confirm_code':''}
+userdetails = {'firstname': '', 'lastname': '', 'username': '',
+               'email': '', 'password': '', 'confirm_code': ''}
 
 
 @app.route("/confirm_email/", methods=['GET', 'POST'])
@@ -39,16 +40,14 @@ def confirm_email():
     confirmation_code = ""
     for a in range(0, 7):
         confirmation_code += str(random.randint(0, 9))
-    
+
     userdetails["confirm_code"] = confirmation_code
 
-    msg = MIMEText(" Hello " + name + " ! \n \n You signed up an account on the Portable library .To confirm that it was really you, please enter the confirmatory code  into the box provided. Thank you \n \n \t \t Confirmatory Code: " +
+    msg = MIMEText(" Hello " + name + " ! \n \n You signed up an account on the Slydehub .To confirm that it was really you, please enter the confirmatory code  into the box provided. Thank you \n \n \t \t Confirmatory Code: " +
                    confirmation_code + "\n \n  But if it was not you can ignore this mail sent to you ")
     msg['Subject'] = 'Portable library email confirmation'
     msg['From'] = 'pentecostalrevivalcenterag@gmail.com'
     msg['To'] = userdetails["email"]
-
-    
 
     context = ssl.create_default_context()
 
@@ -64,7 +63,7 @@ def confirm_email():
 def sign_up_confirm_code():
     info = {}
     if request.method == "POST":
-        request_data=request.get_json()
+        request_data = request.get_json()
 
         confirm_code = request_data["confirm_code"]
         print(confirm_code)
@@ -77,8 +76,8 @@ def sign_up_confirm_code():
             username = userdetails["username"]
             email = userdetails["email"]
             password = userdetails["password"]
-            password =bcrypt.generate_password_hash(password).decode('utf-8')
-            
+            password = bcrypt.generate_password_hash(password).decode('utf-8')
+
             curs, connect = connection()
 
             # inserting statements into the database
@@ -94,13 +93,11 @@ def sign_up_confirm_code():
             gc.collect()
             info['status'] = 'You are successfully logged in'
 
-            
-
             return jsonify(info)
 
         else:
             info['status'] = 'Error logging in'
-            return  jsonify(info)
+            return jsonify(info)
     return jsonify('')
 
 
@@ -160,7 +157,7 @@ def forget_password():
             for a in range(0, 7):
                 confirmation_code += str(random.randint(0, 9))
 
-            msg = MIMEText(" Hello! \n \n You requested for a reset of password on the Pentecostal Revival center,AG website.To confirm that it was really you, please enter the confirmatory code  into the box providedonthe website. Thank you \n \n \t \t Confirmatory Code: " +
+            msg = MIMEText(" Hello! \n \n You requested for a reset of password on slydehub.To confirm that it was really you, please enter the confirmatory code  into the box providedonthe website. Thank you \n \n \t \t Confirmatory Code: " +
                            confirmation_code + "\n \n  But if it was not you can ignore this mail sent to you ")
             msg['Subject'] = 'Portable library email confirmation'
             msg['From'] = 'pentecostalrevivalcenterag@gmail.com'
@@ -233,21 +230,20 @@ def sign_in():
     d = {}
     if request.method == 'POST':
 
-        request_data=request.get_json()
+        request_data = request.get_json()
         email = request_data['email']
         password = request_data['password']
         curs, connect = connection()
         info = curs.execute("SELECT * FROM users WHERE email = %s", [email])
 
         # fetching the password
-        Password = curs.execute("SELECT password FROM users WHERE email = %s", [email])
-        Password=curs.fetchone()[0]
-        print(info)
-        print(Password) 
+        Password = curs.execute(
+            "SELECT password FROM users WHERE email = %s", [email])
+        Password = curs.fetchone()[0]
         curs.close()
         connect.close()
 
-        if info == 1  and bcrypt.check_password_hash(Password, password) == True:
+        if info == 1 and bcrypt.check_password_hash(Password, password) == True:
             d["status"] = "Log in succesfully"
             return jsonify(d)
 
