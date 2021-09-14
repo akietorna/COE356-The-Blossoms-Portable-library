@@ -1,4 +1,5 @@
-from blossoms.settings import *
+from settings import *
+
 # the class Movie will inherit the db.Model of SQLAlchemy
 
 
@@ -27,14 +28,14 @@ class Users(db.Model):
                          user_name=_user_name, email=_email, password=_password)
         db.session.add(new_user)
         db.session.commit()
-        return f'User {_user_name}added'
+        return 
 
-    def get_all_users(i=None):
-        #print('it is okay')
-        users_list = [Users.json_users(item) for item in Users.query.all()]
+    def get_all_users():
+        print('it is okay')
+        users_list = json_user(Users.query.all())
         return users_list
 
-    def get_users(_user_name):
+    def get_user(_user_name):
         result = Users.query.filter_by(user_name=_user_name).first()
         if result == None:
             return []
@@ -59,7 +60,6 @@ class Users(db.Model):
         db.session.commit()
 
 
+
 if __name__ == '__main__':
-    #db.create_all()
-    #print(Users.reset_password(_user_name='oko', ))
-    print(Users.add_user(_user_name='oko v', _last_name='kwame', _first_name='sam', _password='12', _email='ok'))
+    db.create_all()

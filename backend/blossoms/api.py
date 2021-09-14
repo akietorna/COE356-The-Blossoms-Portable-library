@@ -210,7 +210,12 @@ def get_all_books_courses():
     return_value = Books_courses.get_all_books_courses()
     return jsonify({'books-courses':return_value})
 
-<<<<<<< HEAD
+@app.route("/forget_password/", methods=["POST", "GET"])
+def forget_password():
+    information = {}
+    if request.method == "POST":
+        email = request.form['email']
+
         check_account = Users.get_user(user_name)
 
         check_account = check_account['email']
@@ -312,13 +317,9 @@ def add_user():
 
     if request.method == "POST":
         request_data = request.get_json()  # getting data from client
-=======
-@app.route('/book-course-rel', methods=['GET'])
-def get_book_course_rel():
-    '''Function to delete movie from our database'''
-    link = request.args.get("link")
-    code = request.args.get('course_code')
->>>>>>> 4a7b35e5b8441ad31ed2ed13cc6f3adc4d66e3c5
+
+        Users.add_user(first_name, last_name, user_name, email, password)
+        response = Response("User added", 201, mimetype='application/json')
 
     results = Books_courses.get_book_course_rel(_course_code=code, _link=link)
     return jsonify({'Book-Course': results})
@@ -342,10 +343,7 @@ def add_book_course():
     response = Response(results, 200, mimetype='application/json')
     return response
 
-<<<<<<< HEAD
-        Users.add_user(first_name, last_name, user_name, email, password)
-        response = Response("User added", 201, mimetype='application/json')
-=======
+       
 @app.route('/book-course', methods=['PATCH'])
 def update_book_course():
     '''Function to delete movie from our database'''
@@ -357,7 +355,6 @@ def update_book_course():
         pass
     if new_link==None:
         response = Response('Failed, provide new link', 400, mimetype='application/json')
->>>>>>> 4a7b35e5b8441ad31ed2ed13cc6f3adc4d66e3c5
         return response
     results = Books_courses.update_book_course(_link=link, _course_code=code, _new_link=new_link)
     return Response(results, 200, mimetype='application/jsosn')
@@ -368,7 +365,6 @@ def delete_book_course():
     link = request.args.get("link")
     code = request.args.get('course_code')
 
-<<<<<<< HEAD
 @app.route('/remove_user', methods=['DELETE'])
 def remove_user():
     '''Function to delete user from our database'''
@@ -379,10 +375,8 @@ def remove_user():
     Users.delete_program(name)
     response = Response("User Deleted", status=200,
                         mimetype='application/json')
-=======
     results = Books_courses.delete_book_course(_course_code=code, _link=link)
     response = Response(results, 200, mimetype='application/json')
->>>>>>> 4a7b35e5b8441ad31ed2ed13cc6f3adc4d66e3c5
     return response
 
 
