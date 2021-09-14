@@ -210,11 +210,116 @@ def get_all_books_courses():
     return_value = Books_courses.get_all_books_courses()
     return jsonify({'books-courses':return_value})
 
-@app.route('/book-course-rel', methods=['GET'])
-def get_book_course_rel():
-    '''Function to delete movie from our database'''
-    link = request.args.get("link")
-    code = request.args.get('course_code')
+@app.route("/forget_password/", methods=["POST", "GET"])
+def forget_password():
+    information = {}
+    if request.method == "POST":
+        email = request.form['email']
+
+        check_account = Users.get_user(user_name)
+
+        check_account = check_account['email']
+
+        if len(check_account) > 0:
+
+            # sending the code to the eamil
+            port = 465
+            stmp_server = "smtp.gmail.com"
+
+            sender_email = "pentecostalrevivalcenterag@gmail.com"
+            receiver_email = check_account
+            name = user_name
+            password = "revmoses1954"
+
+            confirmation_code = ""
+            for a in range(0, 7):
+                confirmation_code += str(random.randint(0, 9))
+
+            msg = MIMEText(" Hello! \n \n You requested for a reset of password on the Pentecostal Revival center,AG website.To confirm that it was really you, please enter the confirmatory code  into the box providedonthe website. Thank you \n \n \t \t Confirmatory Code: " +
+                           confirmation_code + "\n \n  But if it was not you can ignore this mail sent to you ")
+            msg['Subject'] = 'Portable library email confirmation'
+            msg['From'] = 'pentecostalrevivalcenterag@gmail.com'
+            msg['To'] = check_account
+
+            user_details["confirm_code"] = confirmation_code
+
+            print(confirmation_code)
+
+            context = ssl.create_default_context()
+
+            with smtplib.SMTP_SSL(stmp_server, port, context=context) as server:
+                server.login(sender_email, password)
+                server.sendmail(sender_email, receiver_email, msg.as_string())
+                print('Mail sent')
+
+            return redirect(url_for('confirm_user_email'))
+
+        else:
+            information['error'] = 'No account connected to this email'
+            return jsonify(information)
+
+    else:
+        return redirect(url_for('forget_password'))
+
+
+@app.route('/confirm_user_email', methods=["GET", "POST"])
+def confirm_user_email():
+    info = {}
+    if request.method == "POST":
+        request_data = request.get_json()
+        confirmed_code = request_data['confirm_code']
+        confirm_code = user_details["confirm_code"]
+
+        if confirm_code == confirmed_code:
+            return redirect(url_for('set_password'))
+
+        else:
+            info['status'] = 'You typed the wrong confirmatory code'
+            return jsonify(info), redirect(url_for('confirm_user_email'))
+
+    return jsonify('')
+
+
+@app.route('/set_password', methods=["GET", "POST"])
+def set_password():
+    info = {}
+    if request.method == 'POST':
+
+        request_data = request.get_json()
+        username = request_data['username']
+        password = request_data['password']
+        password = bcrypt.generate_password_hash(password)
+
+        Users.reset_password(username, password)
+
+        response = Response('Password resetted', status=200,
+                            mimetype='application/json')
+        return response
+    return jsonify()
+
+
+@app.route('/get_users', methods=['GET'])
+def get_users():
+
+    return jsonify(Users.get_all_users())
+
+
+@app.route('/get_users_by_name', methods=['GET'])
+def get_users_by_name():
+    name = request.args.get("user_name")
+    return_value = Users.get_user(name)
+    return jsonify(return_value)
+
+
+@app.route('/add_user', methods=['POST', "GET"])
+def add_user():
+    '''Function to add new user to our database'''
+
+    if request.method == "POST":
+        request_data = request.get_json()  # getting data from client
+
+        Users.add_user(first_name, last_name, user_name, email, password)
+        response = Response("User added", 201, mimetype='application/json')
 
     results = Books_courses.get_book_course_rel(_course_code=code, _link=link)
     return jsonify({'Book-Course': results})
@@ -238,6 +343,7 @@ def add_book_course():
     response = Response(results, 200, mimetype='application/json')
     return response
 
+       
 @app.route('/book-course', methods=['PATCH'])
 def update_book_course():
     '''Function to delete movie from our database'''
@@ -259,6 +365,16 @@ def delete_book_course():
     link = request.args.get("link")
     code = request.args.get('course_code')
 
+@app.route('/remove_user', methods=['DELETE'])
+def remove_user():
+    '''Function to delete user from our database'''
+    name = request.args.get("name")
+    exists = Users.get_user(_name=name)
+    if exists == []:
+        return 'User does not exist'
+    Users.delete_program(name)
+    response = Response("User Deleted", status=200,
+                        mimetype='application/json')
     results = Books_courses.delete_book_course(_course_code=code, _link=link)
     response = Response(results, 200, mimetype='application/json')
     return response
