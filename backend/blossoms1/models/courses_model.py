@@ -1,4 +1,4 @@
-from blossoms.settings import *
+from backend.blossoms1.settings import *
 
 
 # the class Movie will inherit the db.Model of SQLAlchemy
@@ -10,7 +10,6 @@ class Courses(db.Model):
     # nullable is false so the column can't be empty
     about = db.Column(db.String(1000), nullable=True)
 
-
     # def json(self):
     #     return {'id': self.id, 'title': self.title,
     #             'year': self.year, 'genre': self.genre}
@@ -18,15 +17,13 @@ class Courses(db.Model):
 
     def json_courses(self):
         return {
-                'name': self.name,
-                'course_code': self.course_code,
-                'about': self.about
-            }
+            'name': self.name,
+            'course_code': self.course_code,
+            'about': self.about
+        }
 
-
-
-    def add_course(_name,_code, _about):
-        new_course = Courses(name = _name, course_code= _code, about=_about)
+    def add_course(_name, _code, _about):
+        new_course = Courses(name=_name, course_code=_code, about=_about)
         db.session.add(new_course)
         db.session.commit()
 
@@ -42,9 +39,9 @@ class Courses(db.Model):
     #     # the .first() method will get that first value returned
 
     def get_course(_code):
-        result = Courses.query.filter_by(course_code = _code).first()
+        result = Courses.query.filter_by(course_code=_code).first()
         print(result)
-        if result==None:
+        if result == None:
             return []
         return [Courses.json_courses(result)]
 
@@ -70,12 +67,9 @@ class Courses(db.Model):
     #     # filter movie by id and delete
     #     db.session.commit()  # commiting the new change to our database
 
-
     def delete_course(_code):
         Courses.query.filter_by(course_code=_code).delete()
         db.session.commit()
-
-
 
 
 # if __name__ == '__main__':

@@ -1,4 +1,4 @@
-from blossoms.settings import *
+from backend.blossoms1.settings import *
 # the class Movie will inherit the db.Model of SQLAlchemy
 
 
@@ -60,6 +60,7 @@ class Users(db.Model):
 
 
 if __name__ == '__main__':
-    #db.create_all()
+    # db.create_all()
     #print(Users.reset_password(_user_name='oko', ))
-    print(Users.add_user(_user_name='oko v', _last_name='kwame', _first_name='sam', _password='12', _email='ok'))
+    print(Users.add_user(_user_name='oko v', _last_name='kwame',
+          _first_name='sam', _password='12', _email='ok'))
