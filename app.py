@@ -239,11 +239,13 @@ def sign_in():
         # fetching the password
         Password = curs.execute(
             "SELECT password FROM users WHERE email = %s", [email])
-        Password = curs.fetchone()[0]
+        Password = curs.fetchone()
+        print(info)
+        print(Password)
         curs.close()
         connect.close()
 
-        if info == 1 and bcrypt.check_password_hash(Password, password) == True:
+        if info == 1 and bcrypt.check_password_hash(Password[0], password) == True:
             d["status"] = "Log in succesfully"
             return jsonify(d)
 
