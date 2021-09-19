@@ -12,12 +12,12 @@ import ssl
 from email.mime.text import MIMEText
 import random
 
-from backend.blossoms1.models.books_courses import *
-from backend.blossoms1.models.preps_model import *
-from backend.blossoms1.models.programs_courses import *
-from backend.blossoms1.models.projects_model import *
-from backend.blossoms1.models.slides import *
-from backend.blossoms1.models.videos_courses import *
+# from backend.blossoms1.models.books_courses import *
+# from backend.blossoms1.models.preps_model import *
+# from backend.blossoms1.models.programs_courses import *
+# from backend.blossoms1.models.projects_model import *
+# from backend.blossoms1.models.slides import *
+# from backend.blossoms1.models.videos_courses import *
 
 
 # initializing the app and other parameters
