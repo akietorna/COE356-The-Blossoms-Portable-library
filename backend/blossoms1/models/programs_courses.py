@@ -1,6 +1,6 @@
-from backend.blossoms1.settings import *
-from backend.blossoms1.models.courses_model import *
-from backend.blossoms1.models.programs_model import *
+from settings import *
+from models.courses_model import *
+from models.programs_model import *
 
 
 # the class Movie will inherit the db.Model of SQLAlchemy
