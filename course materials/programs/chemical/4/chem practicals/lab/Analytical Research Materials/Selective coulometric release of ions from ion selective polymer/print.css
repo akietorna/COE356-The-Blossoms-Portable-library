@@ -1,0 +1,9 @@
+.toolbox {
+	LEFT: -2000px; POSITION: absolute; TOP: -2000px
+}
+#navoption {
+	DISPLAY: none
+}
+#navform {
+	DISPLAY: none
+}

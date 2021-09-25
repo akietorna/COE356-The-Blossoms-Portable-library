@@ -1,0 +1,111 @@
+BODY {
+	PADDING-RIGHT: 1em; PADDING-LEFT: 1em; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+#header {
+	PADDING-RIGHT: 1em; PADDING-LEFT: 1em; PADDING-BOTTOM: 0.1em; MARGIN: 0px; PADDING-TOP: 0.5em; FONT-FAMILY: Helvetica, sans-serif; BACKGROUND-COLOR: #990000
+}
+#header H1 {
+	FONT-SIZE: 1.2em; MARGIN: 0px; COLOR: #ffffff
+}
+#header H1 IMG {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+#header H2 IMG {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+#header H2 {
+	FLOAT: right; MARGIN: -22px 0px
+}
+#breadcrumbs {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; FLOAT: left; PADDING-BOTTOM: 0.2em; MARGIN: 0px; FONT: 0.8em Helvetica, sans-serif; WIDTH: 100%; PADDING-TOP: 0.3em; BORDER-BOTTOM: #999 1px solid; HEIGHT: 1.3em
+}
+#breadcrumbs UL {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+#breadcrumbs LI {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 12px; FONT-SIZE: 0.9em; BACKGROUND: url(http://www.rsc.org/images/designimages/li_topnav.gif) no-repeat left center; FLOAT: left; PADDING-BOTTOM: 0px; MARGIN: 0px 0px 0px 5px; PADDING-TOP: 0px; LIST-STYLE-TYPE: none
+}
+#breadcrumbs LI.home {
+	MARGIN-LEFT: 0px
+}
+.article-info LI.home {
+	MARGIN-LEFT: 0px
+}
+#breadcrumbs {
+	COLOR: #666; TEXT-DECORATION: none
+}
+#breadcrumbs LI A {
+	COLOR: #666; TEXT-DECORATION: none
+}
+#breadcrumbs A:hover {
+	TEXT-DECORATION: underline
+}
+.article-info {
+	PADDING-RIGHT: 0px; DISPLAY: block; PADDING-LEFT: 0px; FLOAT: left; PADDING-BOTTOM: 0px; MARGIN: 0px 0px 2em; FONT: 0.7em Helvetica, sans-serif; WIDTH: 98%; PADDING-TOP: 0.5em
+}
+.article-info LI {
+	CLEAR: none; BORDER-RIGHT: 1px solid; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; FLOAT: left; PADDING-BOTTOM: 0px; LINE-HEIGHT: 1em; PADDING-TOP: 0px; LIST-STYLE-TYPE: none; max-width: 300px
+}
+.article-info LI.last {
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none
+}
+.toolbox {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; BACKGROUND: url(../_images/toolbox_bottom.gif) #eef0f1 no-repeat left bottom; FLOAT: right; PADDING-BOTTOM: 10px; MARGIN: 0px 1em; FONT: 0.8em Helvetica, sans-serif; WIDTH: 170px; PADDING-TOP: 0px
+}
+.toolbox H3 {
+	PADDING-RIGHT: 7px; PADDING-LEFT: 7px; FONT-SIZE: 0.85em; BACKGROUND: url(../_images/toolbox_top.gif) #900 no-repeat left top; PADDING-BOTTOM: 3px; MARGIN: 0px 0px 5px; COLOR: #fff; PADDING-TOP: 3px
+}
+.toolbox UL {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; FONT-SIZE: 95%; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; BORDER-BOTTOM: #ccc 1px solid; LIST-STYLE-TYPE: none
+}
+.toolbox LI {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 3px 0px; PADDING-TOP: 0px
+}
+.toolbox A {
+	MARGIN: 0px 5px
+}
+.toolbox UL {
+	MARGIN: 0px 5px
+}
+.toolbox FORM {
+	MARGIN: 0px 5px
+}
+.toolbox A {
+	COLOR: #0a375e; TEXT-DECORATION: none
+}
+.toolbox A.email {
+	PADDING-LEFT: 20px; BACKGROUND: url(http://www.rsc.org/images/designimages/icon_email.gif) no-repeat left center
+}
+.toolbox A.pdf {
+	PADDING-LEFT: 20px; BACKGROUND: url(../_images/icon_pdf_2_trans.gif) no-repeat left top
+}
+.toolbox A.print {
+	PADDING-LEFT: 20px; BACKGROUND: url(../_images/print.gif) no-repeat left top
+}
+.toolbox A.prospect {
+	PADDING-LEFT: 20px; BACKGROUND: url(/images/designimages/icon_prospect.gif) no-repeat left center
+}
+.toolbox UL.arrow {
+	PADDING-RIGHT: 0px; BORDER-TOP: #fff 1px solid; PADDING-LEFT: 0px; PADDING-BOTTOM: 5px; PADDING-TOP: 3px
+}
+.toolbox UL.arrow LI {
+	PADDING-LEFT: 3px; BACKGROUND: url(../_images/li_nav_trspnt.gif) no-repeat left top; MARGIN: 1px 0px
+}
+.toolbox FORM {
+	BORDER-TOP: #fff 1px solid; MARGIN-TOP: 0px; FONT-SIZE: 95%
+}
+.toolbox FIELDSET {
+	BORDER-RIGHT: medium none; PADDING-RIGHT: 0px; BORDER-TOP: medium none; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; BORDER-LEFT: medium none; PADDING-TOP: 0px; BORDER-BOTTOM: medium none
+}
+.toolbox LABEL {
+	PADDING-RIGHT: 0px; DISPLAY: block; PADDING-LEFT: 0px; FONT-WEIGHT: bold; FONT-SIZE: 0.9em; PADDING-BOTTOM: 0.2em; COLOR: #900; PADDING-TOP: 0.3em
+}
+.toolbox LEGEND {
+	DISPLAY: none
+}
+.toolbox SELECT {
+	FONT-SIZE: 0.9em; WIDTH: 145px
+}
+.toolbox INPUT {
+	MARGIN-BOTTOM: 2px; VERTICAL-ALIGN: bottom
+}
